@@ -4,38 +4,11 @@ import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { NextPage } from 'next';
 import Account from '@/domain/Account';
 import axios, { AxiosRequestConfig } from 'axios';
+import { addAccount } from '@/lib/accountReq';
 
 interface Props {}
 
 const FormAddAccount: NextPage<Props> = () => {
-  const addAccount = async (
-    event: React.FormEvent<HTMLFormElement>,
-    account: Account
-  ) => {
-    event.preventDefault();
-    account.ownerId = 1;
-    const config: AxiosRequestConfig<Account> = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    try {
-      alert(JSON.stringify(account));
-      const response = await axios.post(
-        'http://localhost:8080/api/account',
-        account,
-        config
-      );
-      alert(response.data);
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    } finally {
-      console.log('finally');
-      alert('finally');
-    }
-  };
   const [account, setAccount] = useState<Account>({
     name: '',
     numFreeTransfer: 0,
