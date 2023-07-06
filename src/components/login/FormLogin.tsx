@@ -2,25 +2,32 @@ import React, { MouseEventHandler, useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import styles from './FormLogin.module.css';
+import { auth } from '@/lib/auth';
+import User from '@/domain/User';
 
 type Props = {};
 
 export const FormLogin: React.FC<Props> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
+  const [user, setUser] = useState<User>({ email: '', password: '' });
+  const [loginState, setLoginState] = useState<boolean>(false);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
+    setUser({ ...user, [event.target.name]: event.target.value });
+    console.log(user);
   };
 
-  const changeShowStatus = (
-    event: React.MouseEvent<HTMLSpanElement, MouseEvent>
-  ) => {
+  const changeShowStatus = () => {
     setShowPassword(!showPassword);
+  };
+
+  const login = async (event: React.FormEvent<HTMLFormElement>) => {
+    setLoginState(await auth(event, user));
   };
 
   return (
     <>
-      <Form onSubmit={() => {}}>
+      <Form onSubmit={login}>
         <FormGroup floating>
           <Input
             id="email"
@@ -51,6 +58,7 @@ export const FormLogin: React.FC<Props> = () => {
         </FormGroup>{' '}
         <Button>Submit</Button>
       </Form>
+      <h3>{loginState ? 'ログイン成功' : '未ログイン'}</h3>
     </>
   );
 };
