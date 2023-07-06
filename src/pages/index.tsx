@@ -12,10 +12,16 @@ export default function Home() {
   return (
     <>
       <main style={{ marginTop: 100 }}>
-        <Link href="/addAccount">
-          <Button>アカウント追加</Button>
-        </Link>
-        
+        <div style={{ marginBottom: 30 }}>
+          <Link href="/addAccount">
+            <Button>アカウント追加</Button>
+          </Link>
+        </div>
+        <div>
+          <Link href="/login">
+            <Button>ログイン</Button>
+          </Link>
+        </div>
       </main>
     </>
   );
