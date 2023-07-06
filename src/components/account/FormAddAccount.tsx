@@ -8,7 +8,7 @@ import { addAccount } from '@/lib/accountReq';
 
 interface Props {}
 
-const FormAddAccount: NextPage<Props> = () => {
+const FormAddAccount: React.FC<Props> = () => {
   const [account, setAccount] = useState<Account>({
     name: '',
     numFreeTransfer: 0,
