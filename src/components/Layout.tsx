@@ -46,7 +46,7 @@ const Layout: NextPage<Props> = ({ children }) => {
           </NavItem>
         </Nav>
       </header>
-      <Container>{children}</Container>
+      <Container style={{ marginTop: 50 }}>{children}</Container>
     </div>
   );
 };
