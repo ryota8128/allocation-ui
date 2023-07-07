@@ -9,7 +9,7 @@ type Props = {};
 
 export const FormLogin: React.FC<Props> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
-  const [user, setUser] = useState<User>({ email: '', password: '' });
+  const [user, setUser] = useState<User>({ username: '', password: '' });
   const [loginState, setLoginState] = useState<boolean>(false);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
