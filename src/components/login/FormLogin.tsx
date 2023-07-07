@@ -30,13 +30,13 @@ export const FormLogin: React.FC<Props> = () => {
       <Form onSubmit={login}>
         <FormGroup floating>
           <Input
-            id="email"
-            name="email"
-            placeholder="email"
-            type="email"
+            id="username"
+            name="username"
+            placeholder="username"
+            type="text"
             onChange={onChangeHandler}
           />
-          <Label for="name">メールアドレス</Label>
+          <Label for="name">ユーザーネーム</Label>
         </FormGroup>{' '}
         <FormGroup floating>
           <div

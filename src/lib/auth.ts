@@ -8,7 +8,7 @@ export const auth = async (
 ) => {
   event.preventDefault();
   const url = 'http://localhost:8080/api/user';
-  const params = { email: user.email };
+  const params = { username: user.username };
   let result: boolean = false;
 
   try {
