@@ -3,7 +3,7 @@ import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import styles from './FormLogin.module.css';
 import { auth } from '@/lib/auth';
-import User from '@/domain/User';
+import User from '@/types/DbUser';
 
 type Props = {};
 

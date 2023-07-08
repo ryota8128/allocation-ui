@@ -7,7 +7,7 @@ export default function Home() {
       <main style={{ marginTop: 100 }}>
         <LinkButton href='/account/add' text='アカウント追加' />
         <LinkButton href='/login' text='ログイン' />
-        <LinkButton href='/accountList' text='口座一覧' />
+        <LinkButton href='/account/list' text='口座一覧' />
       </main>
     </>
   );
