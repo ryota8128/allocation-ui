@@ -1,7 +1,6 @@
 import React, { MouseEventHandler, useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import styles from './FormLogin.module.css';
 import { auth } from '@/lib/auth';
 import User from '@/types/DbUser';
 
