@@ -1,7 +1,6 @@
 import React, { MouseEventHandler, useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { auth } from '@/lib/auth';
 import User from '@/types/DbUser';
 import { signIn } from 'next-auth/react';
 
@@ -10,7 +9,6 @@ type Props = {};
 export const FormLogin: React.FC<Props> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const [user, setUser] = useState<User>({ username: '', password: '' });
-  const [loginState, setLoginState] = useState<boolean>(false);
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -63,7 +61,6 @@ export const FormLogin: React.FC<Props> = () => {
         </FormGroup>{' '}
         <Button>Submit</Button>
       </Form>
-      <h3>{loginState ? 'ログイン成功' : '未ログイン'}</h3>
     </>
   );
 };
