@@ -30,7 +30,7 @@ export const auth = async (
       },
     });
 
-    console.log(resUser);
+    console.log(resUser.data);
   } catch (error) {
     console.error(error);
   }
