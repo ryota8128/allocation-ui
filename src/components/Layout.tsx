@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode } from 'react';
@@ -9,6 +10,8 @@ interface Props {
 }
 
 const Layout: NextPage<Props> = ({ children }) => {
+  const { data: session, status } = useSession();
+
   return (
     <div>
       <Head>
@@ -40,9 +43,15 @@ const Layout: NextPage<Props> = ({ children }) => {
               justifyContent: 'center',
             }}
           >
-            <Link className="navbar-brand" href="/">
-              リンク2
-            </Link>
+            {status === 'authenticated' ? (
+              <Link className="navbar-brand" href="/">
+                {session.user?.name}
+              </Link>
+            ) : (
+              <Link className="navbar-brand" href="/">
+                ログアウト
+              </Link>
+            )}
           </NavItem>
         </Nav>
       </header>
