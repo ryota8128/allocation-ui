@@ -3,6 +3,7 @@ import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { auth } from '@/lib/auth';
 import User from '@/types/DbUser';
+import { signIn } from 'next-auth/react';
 
 type Props = {};
 
@@ -21,7 +22,12 @@ export const FormLogin: React.FC<Props> = () => {
   };
 
   const login = async (event: React.FormEvent<HTMLFormElement>) => {
-    setLoginState(await auth(event, user));
+    event.preventDefault();
+    signIn('credentials', {
+      username: user.username,
+      password: user.password,
+      callbackUrl: `http://localhost:3000/`,
+    });
   };
 
   return (
@@ -35,7 +41,7 @@ export const FormLogin: React.FC<Props> = () => {
             type="text"
             onChange={onChangeHandler}
           />
-          <Label for="name">ユーザーネーム</Label>
+          <Label for="username">ユーザーネーム</Label>
         </FormGroup>{' '}
         <FormGroup floating>
           <div
