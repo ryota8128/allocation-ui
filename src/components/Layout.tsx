@@ -33,7 +33,7 @@ const Layout: NextPage<Props> = ({ children }) => {
           </NavItem>
           <NavItem className="ml-auto">
             <Link className="navbar-brand" href="/">
-              リンク1
+              Link1
             </Link>
           </NavItem>
           <NavItem
@@ -49,7 +49,7 @@ const Layout: NextPage<Props> = ({ children }) => {
               </Link>
             ) : (
               <Link className="navbar-brand" href="/">
-                ログアウト
+                ログイン
               </Link>
             )}
           </NavItem>

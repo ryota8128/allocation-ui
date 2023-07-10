@@ -1,14 +1,17 @@
 import axios from 'axios';
+import { Session } from 'inspector';
 import { User } from 'next-auth';
+import { AdapterUser } from 'next-auth/adapters';
+import { JWT } from 'next-auth/jwt';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
-      type: "credentials",
+      id: 'credentials',
+      name: 'Credentials',
+      type: 'credentials',
       credentials: {
         username: { label: 'Username', type: 'text' },
         password: { label: 'Password', type: 'password' },
@@ -29,7 +32,6 @@ export default NextAuth({
             }
           );
           const token = resLogin.data.token;
-          console.log(token);
 
           const resUser = await axios.get('http://localhost:8080/api/user', {
             params: {
@@ -40,19 +42,41 @@ export default NextAuth({
             },
           });
 
-          const loginUser: User = {
+          const user: User = {
             id: resUser.data.id.toString(),
             name: resUser.data.username,
             email: resUser.data.email,
+            token: token,
           };
 
-          console.log(loginUser);
-
-          return loginUser;
+          return user;
         } catch (error) {
           return null;
         }
       },
     }),
   ],
+  callbacks: {
+    jwt: async ({ token, user, account }) => {
+      // 最初のサインイン
+      if (account && user) {
+        return {
+          ...token,
+          accessToken: user.token,
+        };
+      }
+
+      return token;
+    },
+
+    session: async ({ session, token }) => {
+      session.user = {
+        id: token.id,
+        name: token.name,
+        email: token.email,
+      };
+      session.accessToken = token.accessToken;
+      return session;
+    },
+  },
 });
