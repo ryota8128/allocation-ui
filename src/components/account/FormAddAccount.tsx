@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 
-import { NextPage } from 'next';
-import Account from '@/domain/Account';
-import axios, { AxiosRequestConfig } from 'axios';
+import Account from '@/types/Account';
 import { addAccount } from '@/lib/accountReq';
 
 interface Props {}
@@ -15,7 +13,7 @@ const FormAddAccount: React.FC<Props> = () => {
     transferFee: 0,
   });
 
-  const onChangeHander = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(account);
     setAccount({ ...account, [e.target.name]: e.target.value });
   };
@@ -29,7 +27,7 @@ const FormAddAccount: React.FC<Props> = () => {
             name="name"
             placeholder="Account Name"
             type="text"
-            onChange={onChangeHander}
+            onChange={onChangeHandler}
           />
           <Label for="name">口座名</Label>
         </FormGroup>{' '}
@@ -39,7 +37,7 @@ const FormAddAccount: React.FC<Props> = () => {
             name="numFreeTransfer"
             placeholder="numFreeTransfer"
             type="number"
-            onChange={onChangeHander}
+            onChange={onChangeHandler}
           />
           <Label for="numFreeTransfer">月の無料振込回数</Label>
         </FormGroup>{' '}
@@ -49,7 +47,7 @@ const FormAddAccount: React.FC<Props> = () => {
             name="transferFee"
             placeholder="transferFee"
             type="number"
-            onChange={onChangeHander}
+            onChange={onChangeHandler}
           />
           <Label for="transferFee">1回あたりの振込手数料</Label>
         </FormGroup>{' '}

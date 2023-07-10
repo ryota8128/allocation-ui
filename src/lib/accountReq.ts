@@ -1,4 +1,4 @@
-import Account from '@/domain/Account';
+import Account from '@/types/Account';
 import axios, { AxiosRequestConfig } from 'axios';
 
 export const addAccount = async (

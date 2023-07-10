@@ -1,16 +1,14 @@
 import React, { MouseEventHandler, useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import styles from './FormLogin.module.css';
-import { auth } from '@/lib/auth';
-import User from '@/domain/User';
+import User from '@/types/DbUser';
+import { signIn } from 'next-auth/react';
 
 type Props = {};
 
 export const FormLogin: React.FC<Props> = () => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
-  const [user, setUser] = useState<User>({ email: '', password: '' });
-  const [loginState, setLoginState] = useState<boolean>(false);
+  const [user, setUser] = useState<User>({ username: '', password: '' });
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
@@ -22,7 +20,12 @@ export const FormLogin: React.FC<Props> = () => {
   };
 
   const login = async (event: React.FormEvent<HTMLFormElement>) => {
-    setLoginState(await auth(event, user));
+    event.preventDefault();
+    signIn('credentials', {
+      username: user.username,
+      password: user.password,
+      callbackUrl: `http://localhost:3000/`,
+    });
   };
 
   return (
@@ -30,13 +33,13 @@ export const FormLogin: React.FC<Props> = () => {
       <Form onSubmit={login}>
         <FormGroup floating>
           <Input
-            id="email"
-            name="email"
-            placeholder="email"
-            type="email"
+            id="username"
+            name="username"
+            placeholder="username"
+            type="text"
             onChange={onChangeHandler}
           />
-          <Label for="name">メールアドレス</Label>
+          <Label for="username">ユーザーネーム</Label>
         </FormGroup>{' '}
         <FormGroup floating>
           <div
@@ -58,7 +61,6 @@ export const FormLogin: React.FC<Props> = () => {
         </FormGroup>{' '}
         <Button>Submit</Button>
       </Form>
-      <h3>{loginState ? 'ログイン成功' : '未ログイン'}</h3>
     </>
   );
 };
