@@ -1,6 +1,5 @@
 import { LinkButton } from '@/components/common/LinkButton';
 
-
 export default function Home() {
   return (
     <>
