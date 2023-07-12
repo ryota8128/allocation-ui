@@ -3,10 +3,15 @@ import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 
 import Account from '@/types/Account';
 import { addAccount } from '@/lib/accountReq';
+import { getSession, useSession } from 'next-auth/react';
+import { Router, useRouter } from 'next/router';
 
 interface Props {}
 
 const FormAddAccount: React.FC<Props> = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const [account, setAccount] = useState<Account>({
     name: '',
     numFreeTransfer: 0,
@@ -14,13 +19,25 @@ const FormAddAccount: React.FC<Props> = () => {
   });
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(account);
     setAccount({ ...account, [e.target.name]: e.target.value });
+  };
+
+  const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const token = session?.accessToken;
+    if (token) {
+      try {
+        await addAccount(account, token);
+        router.push('/');
+      } catch (e) {
+        console.error(e);
+      }
+    }
   };
 
   return (
     <>
-      <Form onSubmit={(event) => addAccount(event, account)}>
+      <Form onSubmit={onSubmitHandler}>
         <FormGroup floating>
           <Input
             id="name"

@@ -10,26 +10,17 @@ export const getAccount = async (token: string) => {
   return res.data as Account[];
 };
 
-export const addAccount = async (
-  event: React.FormEvent<HTMLFormElement>,
-  account: Account
-) => {
-  event.preventDefault();
-  account.ownerId = 1;
+export const addAccount = async (account: Account, token: string) => {
   const config: AxiosRequestConfig<Account> = {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   };
 
-  try {
-    const response = await axios.post(
-      'http://localhost:8080/api/account',
-      account,
-      config
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error(error);
-  }
+  const response = await axios.post(
+    'http://localhost:8080/api/account',
+    account,
+    config
+  );
 };
