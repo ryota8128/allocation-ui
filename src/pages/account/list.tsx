@@ -1,21 +1,23 @@
-import TableAccountList from '@/components/account/TableAccountLIst';
+import TableAccountList from '@/components/account/TableAccountList';
+import { getAccount } from '@/lib/accountReq';
 import Account from '@/types/Account';
 import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const token = session?.accessToken;
-  const res = await axios.get('http://localhost:8080/api/account/list', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const accountList: Account[] = res.data;
-  console.log(accountList);
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
 
+  const accountList: Account[] = await getAccount(token);
   return {
     props: { accountList },
   };
