@@ -24,7 +24,7 @@ export const FormLogin: React.FC<Props> = () => {
     signIn('credentials', {
       username: user.username,
       password: user.password,
-      callbackUrl: `http://localhost:3000/`,
+      callbackUrl: '/',
     });
   };
 
