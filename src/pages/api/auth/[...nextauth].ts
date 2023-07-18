@@ -6,6 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 const apiUrl = process.env.API_URL;
 
 export default NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       id: 'credentials',
