@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { Session } from 'inspector';
 import { User } from 'next-auth';
-import { AdapterUser } from 'next-auth/adapters';
-import { JWT } from 'next-auth/jwt';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
+
+const apiUrl = process.env.API_URL;
 
 export default NextAuth({
   providers: [
@@ -23,17 +22,16 @@ export default NextAuth({
         const username = credentials.username;
 
         const password = credentials.password;
+        const loginUrl = `${apiUrl}/auth/login`;
         try {
-          const resLogin = await axios.post(
-            'http://localhost:8080/auth/login',
-            {
-              username,
-              password,
-            }
-          );
+          const resLogin = await axios.post(loginUrl, {
+            username,
+            password,
+          });
           const token = resLogin.data.token;
+          const userGetUrl = `${apiUrl}/api/user/`;
 
-          const resUser = await axios.get('http://localhost:8080/api/user', {
+          const resUser = await axios.get(userGetUrl, {
             params: {
               username,
             },
