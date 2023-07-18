@@ -1,8 +1,8 @@
 import Account from '@/types/Account';
 import axios, { AxiosRequestConfig } from 'axios';
-
+const apiUrl = process.env.API_URL
 export const getAccount = async (token: string) => {
-  const res = await axios.get('http://localhost:8080/api/account/list', {
+  const res = await axios.get(`${apiUrl}/api/account/list`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -19,7 +19,7 @@ export const addAccount = async (account: Account, token: string) => {
   };
 
   const response = await axios.post(
-    'http://localhost:8080/api/account',
+    `${apiUrl}/api/account`,
     account,
     config
   );
