@@ -3,7 +3,7 @@ import { User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-const apiUrl = process.env.API_URL;
+
 
 export default NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -17,14 +17,15 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
+        const apiUrl = process.env.API_URL;
         if (!credentials || !credentials.username || !credentials?.password) {
           return null;
         }
-        const username = credentials.username;
 
+        const username = credentials.username;
         const password = credentials.password;
         const loginUrl = `${apiUrl}/auth/login`;
-        console.log(loginUrl, process.env);
+        console.log(loginUrl, process.env.API_HOST);
         try {
           const resLogin = await axios.post(loginUrl, {
             username,
