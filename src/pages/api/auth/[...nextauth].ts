@@ -3,7 +3,7 @@ import { User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-
+const apiUrl = process.env.API_URL;
 
 export default NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -17,7 +17,6 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        const apiUrl = process.env.API_URL;
         if (!credentials || !credentials.username || !credentials?.password) {
           return null;
         }
