@@ -24,7 +24,7 @@ export default NextAuth({
         const username = credentials.username;
         const password = credentials.password;
         const loginUrl = `${apiUrl}/auth/login`;
-
+        console.log(loginUrl, process.env.API_HOST);
         try {
           const resLogin = await axios.post(loginUrl, {
             username,
