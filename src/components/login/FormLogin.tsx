@@ -12,7 +12,6 @@ export const FormLogin: React.FC<Props> = () => {
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
-    console.log(user);
   };
 
   const changeShowStatus = () => {
@@ -24,7 +23,7 @@ export const FormLogin: React.FC<Props> = () => {
     signIn('credentials', {
       username: user.username,
       password: user.password,
-      callbackUrl: '/',
+      callbackUrl: '/?login=success',
     });
   };
 
