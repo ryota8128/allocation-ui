@@ -32,9 +32,15 @@ const Layout: NextPage<Props> = ({ children }) => {
             </Link>
           </NavItem>
           <NavItem className="ml-auto">
-            <Link className="navbar-brand" href="/">
-              Link1
-            </Link>
+            {status === 'authenticated' ? (
+              <Link className="navbar-brand" href="/logout">
+                ログアウト
+              </Link>
+            ) : (
+              <Link className="navbar-brand" href="/user/add">
+                新規会員登録
+              </Link>
+            )}
           </NavItem>
           <NavItem
             style={{

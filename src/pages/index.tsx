@@ -12,7 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     if (login === 'success') {
-      toast.success('ログイン成功');
+      toast.success('ログインしました');
       router.replace(router.pathname); // クエリパラメータを削除する
     }
   }, [login]);
