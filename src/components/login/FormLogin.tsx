@@ -23,7 +23,7 @@ export const FormLogin: React.FC<Props> = () => {
     signIn('credentials', {
       username: user.username,
       password: user.password,
-      callbackUrl: '/',
+      callbackUrl: '/?login=success',
     });
   };
 
