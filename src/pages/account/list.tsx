@@ -27,7 +27,7 @@ interface Props {
   accountList: Account[];
 }
 
-const list: NextPage<Props> = ({ accountList }) => {
+const List: NextPage<Props> = ({ accountList }) => {
   return (
     <div>
       <TableAccountList accountList={accountList} />
@@ -35,4 +35,4 @@ const list: NextPage<Props> = ({ accountList }) => {
   );
 };
 
-export default list;
+export default List;

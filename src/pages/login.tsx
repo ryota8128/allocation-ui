@@ -6,7 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 interface Props {}
 
-const login: NextPage<Props> = () => {
+const Login: NextPage<Props> = () => {
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const { error } = router.query;
@@ -31,4 +31,4 @@ const login: NextPage<Props> = () => {
   );
 };
 
-export default login;
+export default Login;
