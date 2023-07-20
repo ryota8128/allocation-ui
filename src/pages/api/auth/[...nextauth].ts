@@ -53,7 +53,7 @@ export default NextAuth({
 
           return user;
         } catch (error) {
-          throw new Error('Failed');
+          throw new Error('failed');
         }
       },
     }),
