@@ -12,7 +12,6 @@ export const FormLogin: React.FC<Props> = () => {
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
-    console.log(user);
   };
 
   const changeShowStatus = () => {
