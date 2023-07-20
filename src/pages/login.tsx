@@ -9,11 +9,18 @@ interface Props {}
 const Login: NextPage<Props> = () => {
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
-  const { error } = router.query;
+  const { error, logout } = router.query;
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (logout === 'success') {
+      toast.success('ログアウトしました');
+      router.replace(router.pathname); // クエリパラメータを削除する
+    }
+  }, [logout]);
 
   useEffect(() => {
     if (error === 'invalid') {
