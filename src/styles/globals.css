@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* 横方向の中央揃え */
+}
+
+a {
+  color: #222;
+  text-decoration: none; /* オプション: アンダーラインを削除する */
+}
+
+/* オプション: ホバー時の色を指定する */
+a:hover {
+  color: gray;
+}
