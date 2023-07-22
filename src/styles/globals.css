@@ -6,11 +6,11 @@
 }
 
 a {
-  color: #222;
+  color: #000;
   text-decoration: none; /* オプション: アンダーラインを削除する */
 }
 
 /* オプション: ホバー時の色を指定する */
 a:hover {
-  color: gray;
+  color: rgba(0, 0, 0, 0.7);
 }

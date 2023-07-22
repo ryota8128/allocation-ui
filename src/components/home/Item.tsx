@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Children, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { CSSProperties } from 'react';
 
 type Props = {
