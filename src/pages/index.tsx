@@ -1,21 +1,57 @@
-import { LinkButton } from '@/components/common/LinkButton';
-import { log } from 'console';
-import { useSession } from 'next-auth/react';
+import AppTitle from '@/components/home/AppTitle';
+import Item from '@/components/home/Item';
+import { getTransfers } from '@/lib/transferReq';
+import Transfer from '@/types/Transfer';
+import { GetServerSideProps, NextPage } from 'next';
+import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-export default function Home() {
+interface Props {
+  transferList: Transfer[];
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  const token = session?.accessToken;
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  const transferList: Transfer[] = await getTransfers(token);
+
+  return {
+    props: { transferList },
+  };
+};
+
+const Index: NextPage<Props> = ({ transferList }) => {
+  const [showToast, setShowToast] = useState<boolean>(true);
   const { data: session, status } = useSession();
   const router = useRouter();
   const { login } = router.query;
 
   useEffect(() => {
-    if (login === 'success') {
-      toast.success('ログインしました');
-      router.replace(router.pathname); // クエリパラメータを削除する
+    if (login === 'success' && showToast) {
+      setShowToast(false);
     }
   }, [login]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!showToast) {
+        toast.success('ログインしました');
+        router.replace(router.pathname); // クエリパラメータを削除する
+      }
+    }, 50);
+
+    return () => clearTimeout(timer); // コンポーネントがアンマウントされる際にタイマーをクリアする
+  }, [showToast]);
 
   if (status === 'loading') {
     return (
@@ -28,14 +64,20 @@ export default function Home() {
   if (status === 'authenticated') {
     return (
       <>
-        <main style={{ marginTop: 100 }}>
-          <LinkButton href="/login" text="ログイン" />
-          <LinkButton href="/account/list" text="口座一覧" />
-          <LinkButton href="/account/add" text="口座追加" />
-        </main>
+        <div className="container">
+          <AppTitle>Money Allocation App</AppTitle>
+          <Item href="/new-transfer">新規振替</Item>
+          {transferList.map((transfer) => (
+            <>
+              <Item key={transfer.id} href={`/transfer/[${transfer.id}]`}>
+                {transfer.title}
+              </Item>
+            </>
+          ))}
+        </div>
       </>
     );
   }
+};
 
-  router.push('/login');
-}
+export default Index;
