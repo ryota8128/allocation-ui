@@ -43,7 +43,6 @@ const Index: NextPage<Props> = ({ transferList }) => {
   }, [login]);
 
   useEffect(() => {
-    // 2秒後にトーストを表示する
     const timer = setTimeout(() => {
       if (!showToast) {
         toast.success('ログインしました');
