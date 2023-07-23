@@ -3,7 +3,10 @@ import Item from '@/components/home/Item';
 import { getTransfers } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface Props {
   transferList: Transfer[];
@@ -22,28 +25,60 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   const transferList: Transfer[] = await getTransfers(token);
 
-  // const transferList = [{ id: 1, title: '202306', userId: 2 }];
   return {
     props: { transferList },
   };
 };
 
 const Index: NextPage<Props> = ({ transferList }) => {
-  return (
-    <>
-      <div className="container">
-        <AppTitle>Money Allocation App</AppTitle>
-        <Item href="/new-transfer">新規振替</Item>
-        {transferList.map((transfer) => (
-          <>
-            <Item key={transfer.id} href={`/transfer/[${transfer.id}]`}>
-              {transfer.title}
-            </Item>
-          </>
-        ))}
-      </div>
-    </>
-  );
+  const [showToast, setShowToast] = useState<boolean>(true);
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const { login } = router.query;
+
+  useEffect(() => {
+    if (login === 'success' && showToast) {
+      setShowToast(false);
+    }
+  }, [login]);
+
+  useEffect(() => {
+    // 2秒後にトーストを表示する
+    const timer = setTimeout(() => {
+      if (!showToast) {
+        toast.success('ログインしました');
+        router.replace(router.pathname); // クエリパラメータを削除する
+      }
+    }, 50);
+
+    return () => clearTimeout(timer); // コンポーネントがアンマウントされる際にタイマーをクリアする
+  }, [showToast]);
+
+  if (status === 'loading') {
+    return (
+      <>
+        <p>Hang on there...</p>
+      </>
+    );
+  }
+
+  if (status === 'authenticated') {
+    return (
+      <>
+        <div className="container">
+          <AppTitle>Money Allocation App</AppTitle>
+          <Item href="/new-transfer">新規振替</Item>
+          {transferList.map((transfer) => (
+            <>
+              <Item key={transfer.id} href={`/transfer/[${transfer.id}]`}>
+                {transfer.title}
+              </Item>
+            </>
+          ))}
+        </div>
+      </>
+    );
+  }
 };
 
 export default Index;
