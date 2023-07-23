@@ -23,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
       const timer = setTimeout(() => {
         toast.error('不正なリクエストです');
       }, 50);
+      router.replace(router.pathname);
       return () => clearTimeout(timer);
     }
 
