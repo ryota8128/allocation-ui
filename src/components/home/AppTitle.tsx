@@ -24,4 +24,5 @@ const StyledAppTitle = styled.p`
   font-style: normal;
   font-weight: 400;
   line-height: 40px; /* 173.913% */
+  margin-bottom: 30px;
 `;

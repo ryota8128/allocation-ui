@@ -4,9 +4,10 @@ import { CSSProperties } from 'react';
 
 type Props = {
   children: ReactNode;
+  href: string;
 };
 
-const Item: React.FC<Props> = ({ children }) => {
+const Item: React.FC<Props> = ({ children, href }) => {
   const item: CSSProperties = {
     textAlign: 'center',
     fontFamily: 'Inter',
@@ -14,10 +15,11 @@ const Item: React.FC<Props> = ({ children }) => {
     fontStyle: 'normal',
     fontWeight: '400',
     lineHeight: 'normal',
+    marginBottom: '22px',
   };
   return (
     <>
-      <Link href="/new-transfer" style={item}>
+      <Link href={href} style={item}>
         {children}
       </Link>
     </>
