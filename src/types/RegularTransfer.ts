@@ -8,3 +8,4 @@ type RegularTransfer = {
   ratio?: number;
   userId: number;
 };
+

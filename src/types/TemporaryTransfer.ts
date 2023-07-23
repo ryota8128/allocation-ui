@@ -1,4 +1,3 @@
-import toast from 'react-hot-toast';
 type TemporaryTransfer = {
   id: number;
   fromAccount?: number;
@@ -9,4 +8,3 @@ type TemporaryTransfer = {
   transferId: number;
 };
 
-export default TemporaryTransfer;
