@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-const apiUrl = process.env.API_URL
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export const getAccountList = async (token: string) => {
   const res = await axios.get(`${apiUrl}/api/account/list`, {
     headers: {
@@ -17,9 +17,5 @@ export const addAccount = async (account: Account, token: string) => {
     },
   };
 
-  const response = await axios.post(
-    `${apiUrl}/api/account`,
-    account,
-    config
-  );
+  const response = await axios.post(`${apiUrl}/api/account`, account, config);
 };

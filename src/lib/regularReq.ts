@@ -1,5 +1,7 @@
 import axios from 'axios';
-const apiUrl = process.env.API_URL;
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export const findRegular = async (token: string) => {
   const res = await axios.get(`${apiUrl}/api/regular/list`, {
     headers: {
@@ -14,4 +16,21 @@ export const findRegular = async (token: string) => {
     };
   });
   return regularListWithType;
+};
+
+export const updateRegular = async (
+  token: string,
+  regular: RegularTransfer
+) => {
+  try {
+    await axios.patch(`${apiUrl}/api/regular`, regular, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('update regular success');
+  } catch (error) {
+    console.error('update regular error');
+  }
 };
