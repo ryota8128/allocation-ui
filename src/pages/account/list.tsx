@@ -1,6 +1,5 @@
 import TableAccountList from '@/components/account/TableAccountList';
 import { getAccount } from '@/lib/accountReq';
-import Account from '@/types/Account';
 import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession, useSession } from 'next-auth/react';

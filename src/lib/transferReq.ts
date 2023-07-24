@@ -11,3 +11,13 @@ export const getTransfers = async (token: string) => {
   });
   return res.data as Transfer[];
 };
+
+export const findOneTransfer = async (token: string, id: number) => {
+  const res = await axios.get(`${apiUrl}/api/transfer?id=${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data as Transfer;
+};
+

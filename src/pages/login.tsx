@@ -22,13 +22,6 @@ const Login: NextPage<Props> = () => {
     }
   }, [logout]);
 
-  useEffect(() => {
-    if (error === 'invalid') {
-      toast.error('未入力の項目があります');
-    } else if (error === 'failed') {
-      toast.error('ユーザー名または，パスワードが間違っています');
-    }
-  }, [error]);
 
   return (
     <div>

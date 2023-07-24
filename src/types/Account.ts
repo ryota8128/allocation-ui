@@ -1,4 +1,4 @@
-export default interface Account {
+interface Account {
   id?: number;
   name: string;
   numFreeTransfer: number;

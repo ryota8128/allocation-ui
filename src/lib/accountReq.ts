@@ -1,4 +1,3 @@
-import Account from '@/types/Account';
 import axios, { AxiosRequestConfig } from 'axios';
 const apiUrl = process.env.API_URL
 export const getAccount = async (token: string) => {
