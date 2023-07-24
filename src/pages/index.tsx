@@ -69,7 +69,7 @@ const Index: NextPage<Props> = ({ transferList }) => {
           <Item href="/new-transfer">新規振替</Item>
           {transferList.map((transfer) => (
             <>
-              <Item key={transfer.id} href={`/transfer/[${transfer.id}]`}>
+              <Item key={transfer.id} href={`/transfer?id=${transfer.id}`}>
                 {transfer.title}
               </Item>
             </>
