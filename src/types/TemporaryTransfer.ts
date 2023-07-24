@@ -8,4 +8,5 @@ type TemporaryTransfer = {
   amount: number;
   userId: number;
   transferId: number;
+  type: 'temporary';
 };

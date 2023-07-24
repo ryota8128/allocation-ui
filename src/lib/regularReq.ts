@@ -6,5 +6,12 @@ export const findRegular = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res.data as RegularTransfer[];
+  const regularList: RegularTransfer[] = res.data;
+  const regularListWithType: RegularTransfer[] = regularList.map((regular) => {
+    return {
+      ...regular,
+      type: 'regular',
+    };
+  });
+  return regularListWithType;
 };

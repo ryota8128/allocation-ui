@@ -9,4 +9,5 @@ type RegularTransfer = {
   amount?: number;
   ratio?: number;
   userId: number;
+  type: 'regular';
 };
