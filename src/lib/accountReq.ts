@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
-const apiUrl = process.env.API_URL
-export const getAccount = async (token: string) => {
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+export const getAccountList = async (token: string) => {
   const res = await axios.get(`${apiUrl}/api/account/list`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -17,9 +17,5 @@ export const addAccount = async (account: Account, token: string) => {
     },
   };
 
-  const response = await axios.post(
-    `${apiUrl}/api/account`,
-    account,
-    config
-  );
+  const response = await axios.post(`${apiUrl}/api/account`, account, config);
 };

@@ -1,7 +1,7 @@
 import Transfer from '@/types/Transfer';
 import axios from 'axios';
 
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const getTransfers = async (token: string) => {
   const res = await axios.get(`${apiUrl}/api/transfer/list`, {
