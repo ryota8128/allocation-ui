@@ -1,14 +1,19 @@
-import { NextPage } from 'next'
+import { NextPage } from 'next';
 import { Table } from 'reactstrap';
+import AccountDropdown from './AccountDropdown';
 
 interface Props {
   regularList: RegularTransfer[];
+  accountList: Account[];
 }
 
-const RegularTransferTable: NextPage<Props> = ({regularList}) => {
+const RegularTransferTable: NextPage<Props> = ({
+  regularList,
+  accountList,
+}) => {
   return (
     <div>
-      <Table hover responsive>
+      <Table hover>
         <thead>
           <tr>
             <th>from</th>
@@ -21,8 +26,20 @@ const RegularTransferTable: NextPage<Props> = ({regularList}) => {
         <tbody>
           {regularList.map((regular) => (
             <tr key={regular.id}>
-              <td>{regular.fromAccount}</td>
-              <td>{regular.toAccount}</td>
+              <td>
+                <AccountDropdown
+                  accountList={accountList}
+                  transfer={regular}
+                  column="fromAccount"
+                />
+              </td>
+              <td>
+                <AccountDropdown
+                  accountList={accountList}
+                  transfer={regular}
+                  column="toAccount"
+                />
+              </td>
               <td>{regular.description}</td>
               {regular.percentage == false ? (
                 <td>{regular.amount}</td>
@@ -40,8 +57,7 @@ const RegularTransferTable: NextPage<Props> = ({regularList}) => {
         </tbody>
       </Table>
     </div>
+  );
+};
 
-  )
-}
-
-export default RegularTransferTable
+export default RegularTransferTable;
