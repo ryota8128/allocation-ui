@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import Account from '../../types/Account';
 import { Table } from 'reactstrap';
 
 interface Props {
