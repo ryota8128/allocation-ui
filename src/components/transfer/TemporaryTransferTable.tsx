@@ -19,7 +19,7 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList }) => {
         </thead>
         <tbody>
           {temporaryList.map((temporary) => (
-            <tr>
+            <tr key={temporary.id}>
               <td>{temporary.fromAccount}</td>
               <td>{temporary.toAccount}</td>
               <td>{temporary.description}</td>

@@ -20,7 +20,7 @@ const RegularTransferTable: NextPage<Props> = ({regularList}) => {
         </thead>
         <tbody>
           {regularList.map((regular) => (
-            <tr>
+            <tr key={regular.id}>
               <td>{regular.fromAccount}</td>
               <td>{regular.toAccount}</td>
               <td>{regular.description}</td>
