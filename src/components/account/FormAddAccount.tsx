@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
-
-import Account from '@/types/Account';
 import { addAccount } from '@/lib/accountReq';
-import { getSession, useSession } from 'next-auth/react';
-import { Router, useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 interface Props {}
 
