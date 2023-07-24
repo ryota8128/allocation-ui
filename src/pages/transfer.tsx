@@ -1,33 +1,41 @@
 import RegularTransferTable from '@/components/transfer/RegularTransferTable';
 import TemporaryTransferTable from '@/components/transfer/TemporaryTransferTable';
+import { getAccountList } from '@/lib/accountReq';
 import { findRegular } from '@/lib/regularReq';
 import { findTemporary } from '@/lib/temporaryReq';
 import { findOneTransfer } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
 import { NextPage, GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import toast from 'react-hot-toast';
-import { Table } from 'reactstrap';
+import AccountDropdown from '@/components/transfer/AccountDropdown';
 
 interface Props {
   temporaryList: TemporaryTransfer[];
   regularList: RegularTransfer[];
   transfer: Transfer;
+  accountList: Account[];
 }
 
 const TransferPage: NextPage<Props> = ({
   temporaryList,
   regularList,
   transfer,
+  accountList,
 }) => {
   return (
     <div>
       <h1>{transfer.title}</h1>
 
       <h4>Regular Transfer</h4>
-      <RegularTransferTable regularList={regularList} />
+      <RegularTransferTable
+        regularList={regularList}
+        accountList={accountList}
+      />
       <h4>Temporary Transfer</h4>
-      <TemporaryTransferTable temporaryList={temporaryList} />
+      <TemporaryTransferTable
+        accountList={accountList}
+        temporaryList={temporaryList}
+      />
     </div>
   );
 };
@@ -84,11 +92,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  // account-find
+  let accountList: Account[];
+  try {
+    accountList = await getAccountList(token);
+  } catch (error) {
+    return {
+      redirect: {
+        destination: '/?error=invalidRequest',
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
       temporaryList,
       regularList,
       transfer,
+      accountList,
     },
   };
 };
