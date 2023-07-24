@@ -21,7 +21,7 @@ export default NextAuth({
       },
       async authorize(credentials, req) {
         if (!credentials || !credentials.username || !credentials?.password) {
-          throw new Error('invalid');
+          throw new Error('invalidForm');
         }
 
         const username = credentials.username;

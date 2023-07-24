@@ -1,7 +1,6 @@
 import React, { MouseEventHandler, useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import User from '@/types/DbUser';
 import { signIn } from 'next-auth/react';
 
 type Props = {};
