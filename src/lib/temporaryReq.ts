@@ -9,16 +9,17 @@ export const findTemporary = async (token: string) => {
     },
   });
   const temporaryList: TemporaryTransfer[] = res.data;
-  const temporaryListWithType: TemporaryTransfer[] = temporaryList.map(
+  const temporaryListEx: TemporaryTransfer[] = temporaryList.map(
     (temporary): TemporaryTransfer => {
       return {
         ...temporary,
         type: 'temporary',
+        isChanged: false,
       };
     }
   );
 
-  return temporaryListWithType;
+  return temporaryListEx;
 };
 
 export const updateTemporary = async (

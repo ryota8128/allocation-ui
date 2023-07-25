@@ -9,13 +9,14 @@ export const findRegular = async (token: string) => {
     },
   });
   const regularList: RegularTransfer[] = res.data;
-  const regularListWithType: RegularTransfer[] = regularList.map((regular) => {
+  const regularListEx: RegularTransfer[] = regularList.map((regular) => {
     return {
       ...regular,
       type: 'regular',
+      isChanged: false,
     };
   });
-  return regularListWithType;
+  return regularListEx
 };
 
 export const updateRegular = async (
