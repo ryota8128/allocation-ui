@@ -1,5 +1,6 @@
 import AppTitle from '@/components/home/AppTitle';
 import Item from '@/components/home/Item';
+import { isTokenExpired } from '@/lib/ JwtUtils';
 import { getTransfers } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
 import { GetServerSideProps, NextPage } from 'next';
@@ -19,6 +20,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  if (isTokenExpired(token)) {
+    return {
+      redirect: {
+        destination: '/login?error=session-expired',
         permanent: false,
       },
     };

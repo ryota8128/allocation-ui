@@ -19,6 +19,8 @@ export default function App({ Component, pageProps }: AppProps) {
       toast.error('ユーザー名または，パスワードが間違っています');
     } else if (error === 'unauthorize') {
       toast.error('アクセス権限がありません');
+    } else if (error === 'session-expired') {
+      toast.error('ログインし直してください');
     } else if (error === 'invalidRequest') {
       const timer = setTimeout(() => {
         toast.error('不正なリクエストです');
