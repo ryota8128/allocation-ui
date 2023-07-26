@@ -27,12 +27,7 @@ export const updateTemporary = async (
   temporary: TemporaryTransfer
 ) => {
   try {
-    await axios.patch(`${apiUrl}/api/temporary`, temporary, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    await axios.post('/api/temporary/update', temporary);
     console.log('update temporary success');
   } catch {
     console.error('update temporary error');
