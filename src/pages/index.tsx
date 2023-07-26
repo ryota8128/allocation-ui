@@ -33,7 +33,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const transferList: Transfer[] = await getTransfers(token);
+
+  let transferList: Transfer[];
+  try {
+    transferList = await getTransfers(token);
+  } catch (error) {
+    return {
+      redirect: {
+        destination: '/login?error=session-expired',
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: { transferList },
