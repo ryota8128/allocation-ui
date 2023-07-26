@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
 import { Table } from 'reactstrap';
 import AccountDropdown from './AccountDropdown';
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
+import { updateRegular } from '@/lib/regularReq';
 
 interface Props {
   regularList: RegularTransfer[];
@@ -12,61 +13,90 @@ const RegularTransferTable: NextPage<Props> = ({
   regularList,
   accountList,
 }) => {
+  const [defaultRegularList, setDefaultRegularList] =
+    useState<RegularTransfer[]>(regularList);
   const [updatedRegularList, setUpdatedRegularList] =
     useState<RegularTransfer[]>(regularList);
-  const transferProperties: Array<keyof RegularTransfer> = [
-    'fromAccountName',
-    'toAccountName',
-    'description',
-    'amount',
-    'ratio',
-  ];
+
+  const inputStyle: CSSProperties = {
+    border: 'none',
+    outline: 'none',
+  };
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    changedRegular: RegularTransfer
+    changeId: number
   ) => {
     const property = e.target.name as keyof RegularTransfer;
-    const changeId = changedRegular.id;
+
+    // バリデーション
+    if (
+      property === 'ratio' &&
+      (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))
+    ) {
+      return;
+    }
 
     // 表示してるregularListを更新 and 変更のあるregularをisChange:true
     setUpdatedRegularList(
       updatedRegularList.map((regular) => {
-        let isChanged = false;
-        if (regular.id === changeId) {
-          for (const p of transferProperties) {
-            if (p === property) {
-              if (
-                e.target.value !==
-                regularList.filter((reg) => reg.id === changeId)[0][p]
-              ) {
-                isChanged = true;
-                break;
-              }
-            } else {
-              if (
-                regular[p] !==
-                regularList.filter((reg) => reg.id === changeId)[0][p]
-              ) {
-                isChanged = true;
-                break;
-              }
-            }
-          }
-          return {
-            ...regular,
-            [property]: e.target.value,
-            isChanged: isChanged,
-          };
+        if (regular.id !== changeId) {
+          return regular;
         }
-        return regular;
+
+        //　更新前と比較して変わってたらisChanged -> true
+        const defaultRegular = defaultRegularList.find(
+          (r) => r.id === changeId
+        ) as RegularTransfer;
+
+        const isChanged = e.target.value != defaultRegular[property];
+
+        // 変更後の値をセット
+        return {
+          ...regular,
+          [property]: e.target.value,
+          isChanged: isChanged,
+        };
       })
     );
   };
 
+  const onChangeCheckbox = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    changeId: number
+  ) => {
+    let changedRegular: RegularTransfer | undefined = undefined;
+
+    // 値の更新
+    setUpdatedRegularList(
+      updatedRegularList.map((reg) => {
+        if (reg.id === changeId) {
+          changedRegular = { ...reg, percentage: e.target.checked };
+          return changedRegular;
+        }
+
+        return reg;
+      })
+    );
+
+    if (changedRegular) {
+      // DB更新
+      updateRegular(changedRegular as RegularTransfer);
+      setDefaultRegularList([...updatedRegularList]);
+    }
+  };
+
+  const onBlur = (focusRegular: RegularTransfer) => {
+    if (focusRegular.isChanged) {
+      updateRegular(focusRegular);
+      setDefaultRegularList([...updatedRegularList]);
+      focusRegular.isChanged = false;
+    }
+  };
+
   return (
     <div>
-      <Table hover>
+      <Table>
         <thead>
           <tr>
             <th>from</th>
@@ -74,6 +104,7 @@ const RegularTransferTable: NextPage<Props> = ({
             <th>description</th>
             <th>amount</th>
             <th>ratio</th>
+            <th>ratio flag</th>
           </tr>
         </thead>
         <tbody>
@@ -96,29 +127,51 @@ const RegularTransferTable: NextPage<Props> = ({
               <td>
                 <input
                   type="text"
-                  style={{
-                    border: 'none',
-                    outline: 'none',
-                    backgroundColor: '#FFF',
-                    padding: '5px',
-                  }}
+                  style={{ ...inputStyle, width: 150 }}
                   name="description"
                   value={regular.description}
-                  onChange={(e) => onChange(e, regular)}
+                  onChange={(e) => onChange(e, regular.id)}
+                  onBlur={() => onBlur(regular)}
                 />
               </td>
               {regular.percentage == false ? (
-                <td>{regular.amount}</td>
+                <td>
+                  <input
+                    type="number"
+                    style={{ ...inputStyle, width: 100 }}
+                    name="amount"
+                    value={regular.amount}
+                    onChange={(e) => onChange(e, regular.id)}
+                    onBlur={() => onBlur(regular)}
+                  />
+                </td>
               ) : (
                 <td>-</td>
               )}
 
               {regular.percentage == true ? (
-                <td>{regular.ratio}</td>
+                <td>
+                  <input
+                    type="number"
+                    style={{ ...inputStyle, width: 100 }}
+                    name="ratio"
+                    value={regular.ratio}
+                    onChange={(e) => onChange(e, regular.id)}
+                    onBlur={() => onBlur(regular)}
+                  />
+                </td>
               ) : (
                 <td>-</td>
               )}
-              <td>{regular.isChanged ? 'change!' : 'not'}</td>
+
+              <td style={{ textAlign: 'center' }}>
+                <input
+                  type="checkbox"
+                  checked={regular.percentage}
+                  onChange={(e) => onChangeCheckbox(e, regular.id)}
+                  name="percentage"
+                />
+              </td>
             </tr>
           ))}
         </tbody>

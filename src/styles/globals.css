@@ -14,3 +14,26 @@ a {
 a:hover {
   color: rgba(0, 0, 0, 0.7);
 }
+
+/*
+ * <input type="number">の上下の矢印ボタン非表示
+ */
+
+/* Firefox */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Internet Explorer + Edge */
+input[type='number']::-ms-clear {
+  display: none;
+}
+
+/* Chrome + Safari */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
