@@ -9,4 +9,5 @@ type TemporaryTransfer = {
   userId: number;
   transferId: number;
   type: 'temporary';
+  isChanged?: boolean;
 };

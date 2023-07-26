@@ -9,31 +9,24 @@ export const findTemporary = async (token: string) => {
     },
   });
   const temporaryList: TemporaryTransfer[] = res.data;
-  const temporaryListWithType: TemporaryTransfer[] = temporaryList.map(
+  const temporaryListEx: TemporaryTransfer[] = temporaryList.map(
     (temporary): TemporaryTransfer => {
       return {
         ...temporary,
         type: 'temporary',
+        isChanged: false,
       };
     }
   );
 
-  return temporaryListWithType;
+  return temporaryListEx;
 };
 
-export const updateTemporary = async (
-  token: string,
-  temporary: TemporaryTransfer
-) => {
+export const updateTemporary = async (temporary: TemporaryTransfer) => {
   try {
-    await axios.patch(`${apiUrl}/api/temporary`, temporary, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    console.log('update temporary success');
+    await axios.post('/api/temporary/update', temporary);
+    console.log('Success to update TemporaryTransfer');
   } catch {
-    console.error('update temporary error');
+    console.error('Failed to update TemporaryTransfer');
   }
 };
