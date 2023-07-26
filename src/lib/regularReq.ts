@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { headers } from 'next/dist/client/components/headers';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -9,28 +10,23 @@ export const findRegular = async (token: string) => {
     },
   });
   const regularList: RegularTransfer[] = res.data;
-  const regularListWithType: RegularTransfer[] = regularList.map((regular) => {
+  const regularListEx: RegularTransfer[] = regularList.map((regular) => {
     return {
       ...regular,
       type: 'regular',
+      isChanged: false,
     };
   });
-  return regularListWithType;
+  return regularListEx;
 };
 
 export const updateRegular = async (
-  token: string,
   regular: RegularTransfer
 ) => {
   try {
-    await axios.patch(`${apiUrl}/api/regular`, regular, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    console.log('update regular success');
+    await axios.post('/api/regular/update', regular);
+    console.log('Success to update RegularTransfer');
   } catch (error) {
-    console.error('update regular error');
+    console.log('Failed to update RegularTransfer');
   }
 };

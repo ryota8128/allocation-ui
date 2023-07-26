@@ -21,9 +21,6 @@ const AccountDropdown: NextPage<Props> = ({
   transfer,
   column,
 }) => {
-  const { data: session } = useSession();
-  const token = session?.accessToken as string;
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
@@ -37,9 +34,9 @@ const AccountDropdown: NextPage<Props> = ({
     setTitle(newTitle);
     const newTransfer = { ...transfer, [column]: newAccountId };
     if (transfer.type === 'temporary') {
-      await updateTemporary(token, newTransfer as TemporaryTransfer);
+      await updateTemporary(newTransfer as TemporaryTransfer);
     } else if (transfer.type === 'regular') {
-      await updateRegular(token, newTransfer as RegularTransfer);
+      await updateRegular(newTransfer as RegularTransfer);
     }
   };
 

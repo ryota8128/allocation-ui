@@ -10,4 +10,5 @@ type RegularTransfer = {
   ratio?: number;
   userId: number;
   type: 'regular';
+  isChanged?: boolean;
 };
