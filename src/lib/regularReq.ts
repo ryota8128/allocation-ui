@@ -21,7 +21,6 @@ export const findRegular = async (token: string) => {
 };
 
 export const updateRegular = async (
-  token: string,
   regular: RegularTransfer
 ) => {
   try {

@@ -22,14 +22,11 @@ export const findTemporary = async (token: string) => {
   return temporaryListEx;
 };
 
-export const updateTemporary = async (
-  token: string,
-  temporary: TemporaryTransfer
-) => {
+export const updateTemporary = async (temporary: TemporaryTransfer) => {
   try {
     await axios.post('/api/temporary/update', temporary);
-    console.log('update temporary success');
+    console.log('Success to update TemporaryTransfer');
   } catch {
-    console.error('update temporary error');
+    console.error('Failed to update TemporaryTransfer');
   }
 };
