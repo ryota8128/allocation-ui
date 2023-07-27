@@ -81,7 +81,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let temporaryList: TemporaryTransfer[];
   let regularList: RegularTransfer[];
   try {
-    temporaryList = await findTemporary(token);
+    temporaryList = await findTemporary(token, transferId);
     regularList = await findRegular(token);
   } catch (error) {
     return {
