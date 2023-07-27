@@ -48,7 +48,7 @@ const AccountDropdown: NextPage<Props> = ({
                   key={account.id}
                   onClick={() =>
                     onClickDropdown(
-                      transfer.id,
+                      transfer.id as number,
                       account.id as number,
                       account.name,
                       column
