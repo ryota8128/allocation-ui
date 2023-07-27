@@ -1,7 +1,4 @@
-import { updateRegular } from '@/lib/regularReq';
-import { updateTemporary } from '@/lib/temporaryReq';
 import { NextPage } from 'next';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import {
   Dropdown,
@@ -14,31 +11,27 @@ interface Props {
   accountList: Account[];
   transfer: TemporaryTransfer | RegularTransfer;
   column: 'fromAccount' | 'toAccount';
+  onClickDropdown: (
+    id: number,
+    newAccountId: number,
+    newAccountName: string,
+    column: 'fromAccount' | 'toAccount'
+  ) => void;
 }
 
 const AccountDropdown: NextPage<Props> = ({
   accountList,
   transfer,
   column,
+  onClickDropdown,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  const [title, setTitle] = useState<string>(
+  const title =
     column === 'fromAccount'
       ? transfer.fromAccountName ?? '-'
-      : transfer.toAccountName ?? '-'
-  );
-
-  const updateAccount = async (newTitle: string, newAccountId: number) => {
-    setTitle(newTitle);
-    const newTransfer = { ...transfer, [column]: newAccountId };
-    if (transfer.type === 'temporary') {
-      await updateTemporary(newTransfer as TemporaryTransfer);
-    } else if (transfer.type === 'regular') {
-      await updateRegular(newTransfer as RegularTransfer);
-    }
-  };
+      : transfer.toAccountName ?? '-';
 
   return (
     <div className="d-flex">
@@ -48,14 +41,24 @@ const AccountDropdown: NextPage<Props> = ({
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem header>口座選択</DropdownItem>
-          {accountList.map((account) => (
-            <DropdownItem
-              key={account.id}
-              onClick={() => updateAccount(account.name, account.id as number)}
-            >
-              {account.name}
-            </DropdownItem>
-          ))}
+          {accountList.map(
+            (account) =>
+              account.name !== title && (
+                <DropdownItem
+                  key={account.id}
+                  onClick={() =>
+                    onClickDropdown(
+                      transfer.id,
+                      account.id as number,
+                      account.name,
+                      column
+                    )
+                  }
+                >
+                  {account.name}
+                </DropdownItem>
+              )
+          )}
         </DropdownMenu>
       </Dropdown>
     </div>
