@@ -94,6 +94,31 @@ const RegularTransferTable: NextPage<Props> = ({
     }
   };
 
+  // dropdown内での変更を検知してupdateする
+  const onClickDropdown = (
+    id: number,
+    newAccountId: number,
+    newAccountName: string,
+    column: 'fromAccount' | 'toAccount'
+  ) => {
+    let changedRegular: RegularTransfer | undefined = undefined;
+    setUpdatedRegularList(
+      updatedRegularList.map((reg) => {
+        if (reg.id !== id) return reg;
+
+        changedRegular = {
+          ...reg,
+          [column]: newAccountId,
+          [`${column}Name`]: newAccountName,
+        };
+        return changedRegular;
+      })
+    );
+    if (changedRegular) {
+      updateRegular(changedRegular);
+    }
+  };
+
   return (
     <div>
       <Table>
@@ -115,6 +140,7 @@ const RegularTransferTable: NextPage<Props> = ({
                   accountList={accountList}
                   transfer={regular}
                   column="fromAccount"
+                  onClickDropdown={onClickDropdown}
                 />
               </td>
               <td>
@@ -122,6 +148,7 @@ const RegularTransferTable: NextPage<Props> = ({
                   accountList={accountList}
                   transfer={regular}
                   column="toAccount"
+                  onClickDropdown={onClickDropdown}
                 />
               </td>
               <td>
