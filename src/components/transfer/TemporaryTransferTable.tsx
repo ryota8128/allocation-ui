@@ -60,6 +60,31 @@ const TemporaryTransferTable: NextPage<Props> = ({
     }
   };
 
+  // dropdown内での変更を検知してupdateする
+  const onClickDropdown = (
+    id: number,
+    newAccountId: number,
+    newAccountName: string,
+    column: 'fromAccount' | 'toAccount'
+  ) => {
+    let changedTemporary: TemporaryTransfer | undefined = undefined;
+    setUpdatedTemporaryList(
+      updatedTemporaryList.map((temp) => {
+        if (temp.id !== id) return temp;
+
+        changedTemporary = {
+          ...temp,
+          [column]: newAccountId,
+          [`${column}Name`]: newAccountName,
+        };
+        return changedTemporary;
+      })
+    );
+    if (changedTemporary) {
+      updateTemporary(changedTemporary);
+    }
+  };
+
   return (
     <div>
       <Table>
@@ -79,6 +104,7 @@ const TemporaryTransferTable: NextPage<Props> = ({
                   accountList={accountList}
                   transfer={temporary}
                   column="fromAccount"
+                  onClickDropdown={onClickDropdown}
                 />
               </td>
               <td>
@@ -86,6 +112,7 @@ const TemporaryTransferTable: NextPage<Props> = ({
                   accountList={accountList}
                   transfer={temporary}
                   column="toAccount"
+                  onClickDropdown={onClickDropdown}
                 />
               </td>
               <td>
