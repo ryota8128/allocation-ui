@@ -41,21 +41,24 @@ const AccountDropdown: NextPage<Props> = ({
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem header>口座選択</DropdownItem>
-          {accountList.map((account) => (
-            <DropdownItem
-              key={account.id}
-              onClick={() =>
-                onClickDropdown(
-                  transfer.id,
-                  account.id as number,
-                  account.name,
-                  column
-                )
-              }
-            >
-              {account.name}
-            </DropdownItem>
-          ))}
+          {accountList.map(
+            (account) =>
+              account.name !== title && (
+                <DropdownItem
+                  key={account.id}
+                  onClick={() =>
+                    onClickDropdown(
+                      transfer.id,
+                      account.id as number,
+                      account.name,
+                      column
+                    )
+                  }
+                >
+                  {account.name}
+                </DropdownItem>
+              )
+          )}
         </DropdownMenu>
       </Dropdown>
     </div>
