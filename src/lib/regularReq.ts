@@ -4,20 +4,27 @@ import axios from 'axios';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const findRegular = async (token: string) => {
-  const res = await axios.get(`${apiUrl}/api/regular/list`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const regularList: RegularTransfer[] = res.data;
-  const regularListEx: RegularTransfer[] = regularList.map((regular) => {
-    return {
-      ...regular,
-      type: 'regular',
-      isChanged: false,
-    };
-  });
-  return regularListEx;
+  try {
+    const res = await axios.get(`${apiUrl}/api/regular/list`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const regularList: RegularTransfer[] = res.data;
+    const regularListEx: RegularTransfer[] = regularList.map((regular) => {
+      return {
+        ...regular,
+        type: 'regular',
+        isChanged: false,
+      };
+    });
+    
+    return regularListEx;
+  } catch (error) {
+    // TODO: ログインし直し
+    console.log('Failed to find RegularTransferList');
+    return;
+  }
 };
 
 export const updateRegular = async (regular: RegularTransfer) => {
@@ -38,7 +45,7 @@ export const insertRegular = async () => {
   };
   try {
     await axios.post('api/regular/insert', newRegular);
-    console.log('Success to insert RegularTransfer')
+    console.log('Success to insert RegularTransfer');
   } catch (error) {
     console.log('Failed to update RegularTransfer');
     // TODO: ログインし直し
