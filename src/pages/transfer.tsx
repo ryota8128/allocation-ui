@@ -31,7 +31,7 @@ const TransferPage: NextPage<Props> = ({
         regularList={regularList}
         accountList={accountList}
       />
-      <h4>Temporary Transfer</h4>
+      <h4 style={{ marginTop: 30 }}>Temporary Transfer</h4>
       <TemporaryTransferTable
         accountList={accountList}
         temporaryList={temporaryList}
