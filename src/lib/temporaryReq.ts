@@ -2,10 +2,13 @@ import axios from 'axios';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export const findTemporary = async (token: string) => {
+export const findTemporary = async (token: string, transferId: number) => {
   const res = await axios.get(`${apiUrl}/api/temporary/list`, {
     headers: {
       Authorization: `Bearer ${token}`,
+    },
+    params: {
+      transferId,
     },
   });
   const temporaryList: TemporaryTransfer[] = res.data;
