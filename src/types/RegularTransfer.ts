@@ -1,5 +1,5 @@
 type RegularTransfer = {
-  id: number;
+  id?: number;
   fromAccount?: number;
   toAccount?: number;
   fromAccountName?: string;
@@ -8,7 +8,7 @@ type RegularTransfer = {
   percentage: boolean;
   amount?: number;
   ratio?: number;
-  userId: number;
-  type: 'regular';
+  userId?: number;
+  type?: 'regular';
   isChanged?: boolean;
 };
