@@ -7,7 +7,6 @@ import { findOneTransfer } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
 import { NextPage, GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import AccountDropdown from '@/components/transfer/AccountDropdown';
 
 interface Props {
   temporaryList: TemporaryTransfer[];
@@ -82,7 +81,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let regularList: RegularTransfer[];
   try {
     temporaryList = await findTemporary(token, transferId);
-    regularList = await findRegular(token);
+    regularList = (await findRegular(token)) as unknown as RegularTransfer[];
   } catch (error) {
     return {
       redirect: {
