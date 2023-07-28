@@ -30,8 +30,8 @@ const AccountDropdown: NextPage<Props> = ({
 
   const title =
     column === 'fromAccount'
-      ? transfer.fromAccountName ?? '-'
-      : transfer.toAccountName ?? '-';
+      ? transfer.fromAccountName ?? '---'
+      : transfer.toAccountName ?? '---';
 
   return (
     <div className="d-flex">
