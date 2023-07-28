@@ -7,7 +7,6 @@ import { findOneTransfer } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
 import { NextPage, GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
-import AccountDropdown from '@/components/transfer/AccountDropdown';
 
 interface Props {
   temporaryList: TemporaryTransfer[];
@@ -16,25 +15,18 @@ interface Props {
   accountList: Account[];
 }
 
-const TransferPage: NextPage<Props> = ({
-  temporaryList,
-  regularList,
-  transfer,
-  accountList,
-}) => {
+const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, accountList }) => {
   return (
     <div>
       <h1>{transfer.title}</h1>
 
       <h4>Regular Transfer</h4>
-      <RegularTransferTable
-        regularList={regularList}
-        accountList={accountList}
-      />
-      <h4>Temporary Transfer</h4>
+      <RegularTransferTable regularList={regularList} accountList={accountList} />
+      <h4 style={{ marginTop: 30 }}>Temporary Transfer</h4>
       <TemporaryTransferTable
         accountList={accountList}
         temporaryList={temporaryList}
+        transfer={transfer}
       />
     </div>
   );
@@ -81,8 +73,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let temporaryList: TemporaryTransfer[];
   let regularList: RegularTransfer[];
   try {
-    temporaryList = await findTemporary(token, transferId);
-    regularList = await findRegular(token);
+    temporaryList = (await findTemporary(token, transferId)) as TemporaryTransfer[];
+    regularList = (await findRegular(token)) as unknown as RegularTransfer[];
   } catch (error) {
     return {
       redirect: {

@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import { Table } from 'reactstrap';
+import { Button, Table } from 'reactstrap';
 import AccountDropdown from './AccountDropdown';
 import { CSSProperties, useState } from 'react';
-import { updateRegular } from '@/lib/regularReq';
+import { insertRegular, updateRegular } from '@/lib/regularReq';
 
 interface Props {
   regularList: RegularTransfer[];
@@ -86,6 +86,7 @@ const RegularTransferTable: NextPage<Props> = ({
     }
   };
 
+  // input要素のフォーカスが外れた時に変化があればDBをupdateする
   const onBlur = (focusRegular: RegularTransfer) => {
     if (focusRegular.isChanged) {
       updateRegular(focusRegular);
@@ -119,9 +120,14 @@ const RegularTransferTable: NextPage<Props> = ({
     }
   };
 
+  // 新規追加処理
+  const onClickInsert = () => {
+    insertRegular();
+    window.location.reload();
+  };
   return (
     <div>
-      <Table>
+      <Table style={{ marginBottom: 0 }}>
         <thead>
           <tr>
             <th>from</th>
@@ -157,7 +163,7 @@ const RegularTransferTable: NextPage<Props> = ({
                   style={{ ...inputStyle, width: 150 }}
                   name="description"
                   value={regular.description}
-                  onChange={(e) => onChange(e, regular.id)}
+                  onChange={(e) => onChange(e, regular.id as number)}
                   onBlur={() => onBlur(regular)}
                 />
               </td>
@@ -168,7 +174,7 @@ const RegularTransferTable: NextPage<Props> = ({
                     style={{ ...inputStyle, width: 100 }}
                     name="amount"
                     value={regular.amount}
-                    onChange={(e) => onChange(e, regular.id)}
+                    onChange={(e) => onChange(e, regular.id as number)}
                     onBlur={() => onBlur(regular)}
                   />
                 </td>
@@ -183,7 +189,7 @@ const RegularTransferTable: NextPage<Props> = ({
                     style={{ ...inputStyle, width: 100 }}
                     name="ratio"
                     value={regular.ratio}
-                    onChange={(e) => onChange(e, regular.id)}
+                    onChange={(e) => onChange(e, regular.id as number)}
                     onBlur={() => onBlur(regular)}
                   />
                 </td>
@@ -195,7 +201,7 @@ const RegularTransferTable: NextPage<Props> = ({
                 <input
                   type="checkbox"
                   checked={regular.percentage}
-                  onChange={(e) => onChangeCheckbox(e, regular.id)}
+                  onChange={(e) => onChangeCheckbox(e, regular.id as number)}
                   name="percentage"
                 />
               </td>
@@ -203,6 +209,9 @@ const RegularTransferTable: NextPage<Props> = ({
           ))}
         </tbody>
       </Table>
+      <Button outline className="btn-sm" onClick={onClickInsert}>
+        新規追加
+      </Button>
     </div>
   );
 };
