@@ -32,7 +32,7 @@ export const findTemporary = async (token: string, transferId: number) => {
 
 export const updateTemporary = async (temporary: TemporaryTransfer) => {
   try {
-    await axios.post('/api/temporary/update', temporary);
+    await axios.patch('/api/temporary/update', temporary);
     console.log('Success to update TemporaryTransfer');
   } catch {
     console.error('Failed to update TemporaryTransfer');
@@ -51,5 +51,19 @@ export const insertTemporary = async (transferId: number) => {
   } catch (error) {
     console.log('Failed to update TemporaryTransfer');
     // TODO: ログインし直し
+  }
+};
+
+export const deleteTemporary = async (id: number) => {
+  try {
+    await axios.delete('api/temporary/delete', {
+      params: {
+        id,
+      },
+    });
+    console.log('Success to delete TemporaryTransfer');
+  } catch (error) {
+    console.log('Failed to delete TemporaryTransfer');
+    // TODO: ログイン見直し
   }
 };
