@@ -1,18 +1,17 @@
 import { NextPage } from 'next';
-import { Table } from 'reactstrap';
+import { Button, Table } from 'reactstrap';
 import AccountDropdown from './AccountDropdown';
 import { CSSProperties, useState } from 'react';
-import { updateTemporary } from '@/lib/temporaryReq';
+import { insertTemporary, updateTemporary } from '@/lib/temporaryReq';
+import Transfer from '@/types/Transfer';
 
 interface Props {
   temporaryList: TemporaryTransfer[];
   accountList: Account[];
+  transfer: Transfer;
 }
 
-const TemporaryTransferTable: NextPage<Props> = ({
-  temporaryList,
-  accountList,
-}) => {
+const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, transfer }) => {
   const [defaultTemporaryList, setDefaultTemporaryList] =
     useState<TemporaryTransfer[]>(temporaryList);
   const [updatedTemporaryList, setUpdatedTemporaryList] =
@@ -23,10 +22,7 @@ const TemporaryTransferTable: NextPage<Props> = ({
     outline: 'none',
   };
 
-  const onChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    changeId: number
-  ) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>, changeId: number) => {
     const property = e.target.name as keyof TemporaryTransfer;
 
     // 表示してるtemporaryListを更新 and 変更のあるregularをisChange:true
@@ -85,6 +81,12 @@ const TemporaryTransferTable: NextPage<Props> = ({
     }
   };
 
+  // 新規追加処理
+  const onClickInsert = () => {
+    insertTemporary(transfer.id);
+    window.location.reload();
+  };
+
   return (
     <div>
       <Table>
@@ -121,7 +123,7 @@ const TemporaryTransferTable: NextPage<Props> = ({
                   style={{ ...inputStyle, width: 150 }}
                   name="description"
                   value={temporary.description}
-                  onChange={(e) => onChange(e, temporary.id)}
+                  onChange={(e) => onChange(e, temporary.id as number)}
                   onBlur={() => onBlur(temporary)}
                 />
               </td>
@@ -131,7 +133,7 @@ const TemporaryTransferTable: NextPage<Props> = ({
                   style={{ ...inputStyle, width: 100 }}
                   name="amount"
                   value={temporary.amount}
-                  onChange={(e) => onChange(e, temporary.id)}
+                  onChange={(e) => onChange(e, temporary.id as number)}
                   onBlur={() => onBlur(temporary)}
                 />
               </td>
@@ -139,6 +141,9 @@ const TemporaryTransferTable: NextPage<Props> = ({
           ))}
         </tbody>
       </Table>
+      <Button outline className="btn-sm" onClick={onClickInsert}>
+        新規追加
+      </Button>
     </div>
   );
 };
