@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { Button, Table } from 'reactstrap';
 import AccountDropdown from './AccountDropdown';
 import { CSSProperties, useState } from 'react';
-import { insertTemporary, updateTemporary } from '@/lib/temporaryReq';
+import { deleteTemporary, insertTemporary, updateTemporary } from '@/lib/temporaryReq';
 import Transfer from '@/types/Transfer';
 
 interface Props {
@@ -87,8 +87,20 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
     window.location.reload();
   };
 
+  // Temporary削除処理
+  const onClickDeleteButton = (id: number) => {
+    deleteTemporary(id);
+    window.location.reload();
+  };
   return (
     <div>
+      <style jsx>{`
+        /* 削除ボタンがはみ出すようにする */
+        td:last-child {
+          white-space: nowrap;
+          border: none;
+        }
+      `}</style>
       <Table>
         <thead>
           <tr>
@@ -137,11 +149,21 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
                   onBlur={() => onBlur(temporary)}
                 />
               </td>
+              <td>
+                <Button
+                  outline
+                  className="btn-sm"
+                  color="danger"
+                  onClick={() => onClickDeleteButton(temporary.id as number)}
+                >
+                  削除
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>
       </Table>
-      <Button outline className="btn-sm" onClick={onClickInsert}>
+      <Button className="btn-sm" onClick={onClickInsert}>
         新規追加
       </Button>
     </div>

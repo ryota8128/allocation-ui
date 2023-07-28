@@ -2,31 +2,23 @@ import { NextPage } from 'next';
 import { Button, Table } from 'reactstrap';
 import AccountDropdown from './AccountDropdown';
 import { CSSProperties, useState } from 'react';
-import { insertRegular, updateRegular } from '@/lib/regularReq';
+import { deleteRegular, insertRegular, updateRegular } from '@/lib/regularReq';
 
 interface Props {
   regularList: RegularTransfer[];
   accountList: Account[];
 }
 
-const RegularTransferTable: NextPage<Props> = ({
-  regularList,
-  accountList,
-}) => {
-  const [defaultRegularList, setDefaultRegularList] =
-    useState<RegularTransfer[]>(regularList);
-  const [updatedRegularList, setUpdatedRegularList] =
-    useState<RegularTransfer[]>(regularList);
+const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => {
+  const [defaultRegularList, setDefaultRegularList] = useState<RegularTransfer[]>(regularList);
+  const [updatedRegularList, setUpdatedRegularList] = useState<RegularTransfer[]>(regularList);
 
   const inputStyle: CSSProperties = {
     border: 'none',
     outline: 'none',
   };
 
-  const onChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    changeId: number
-  ) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>, changeId: number) => {
     const property = e.target.name as keyof RegularTransfer;
 
     // バリデーション
@@ -45,9 +37,7 @@ const RegularTransferTable: NextPage<Props> = ({
         }
 
         //　更新前と比較して変わってたらisChanged -> true
-        const defaultRegular = defaultRegularList.find(
-          (r) => r.id === changeId
-        ) as RegularTransfer;
+        const defaultRegular = defaultRegularList.find((r) => r.id === changeId) as RegularTransfer;
 
         const isChanged = e.target.value != defaultRegular[property];
 
@@ -61,10 +51,7 @@ const RegularTransferTable: NextPage<Props> = ({
     );
   };
 
-  const onChangeCheckbox = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    changeId: number
-  ) => {
+  const onChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>, changeId: number) => {
     let changedRegular: RegularTransfer | undefined = undefined;
 
     // 値の更新
@@ -125,8 +112,22 @@ const RegularTransferTable: NextPage<Props> = ({
     insertRegular();
     window.location.reload();
   };
+
+  // Regular削除処理
+  const onClickDeleteButton = (id: number) => {
+    deleteRegular(id);
+    window.location.reload();
+  };
+
   return (
     <div>
+      <style jsx>{`
+        /* 削除ボタンがはみ出すようにする */
+        td:last-child {
+          white-space: nowrap;
+          border: none;
+        }
+      `}</style>
       <Table style={{ marginBottom: 0 }}>
         <thead>
           <tr>
@@ -179,7 +180,7 @@ const RegularTransferTable: NextPage<Props> = ({
                   />
                 </td>
               ) : (
-                <td>-</td>
+                <td>---</td>
               )}
 
               {regular.percentage == true ? (
@@ -194,7 +195,7 @@ const RegularTransferTable: NextPage<Props> = ({
                   />
                 </td>
               ) : (
-                <td>-</td>
+                <td>---</td>
               )}
 
               <td style={{ textAlign: 'center' }}>
@@ -205,11 +206,21 @@ const RegularTransferTable: NextPage<Props> = ({
                   name="percentage"
                 />
               </td>
+              <td>
+                <Button
+                  outline
+                  className="btn-sm"
+                  color="danger"
+                  onClick={() => onClickDeleteButton(regular.id as number)}
+                >
+                  削除
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>
       </Table>
-      <Button outline className="btn-sm" onClick={onClickInsert}>
+      <Button className="btn-sm" onClick={onClickInsert}>
         新規追加
       </Button>
     </div>

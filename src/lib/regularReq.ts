@@ -18,7 +18,7 @@ export const findRegular = async (token: string) => {
         isChanged: false,
       };
     });
-    
+
     return regularListEx;
   } catch (error) {
     // TODO: ログインし直し
@@ -29,7 +29,7 @@ export const findRegular = async (token: string) => {
 
 export const updateRegular = async (regular: RegularTransfer) => {
   try {
-    await axios.post('/api/regular/update', regular);
+    await axios.patch('/api/regular/update', regular);
     console.log('Success to update RegularTransfer');
   } catch (error) {
     console.log('Failed to update RegularTransfer');
@@ -49,5 +49,19 @@ export const insertRegular = async () => {
   } catch (error) {
     console.log('Failed to update RegularTransfer');
     // TODO: ログインし直し
+  }
+};
+
+export const deleteRegular = async (id: number) => {
+  try {
+    await axios.delete('api/regular/delete', {
+      params: {
+        id,
+      },
+    });
+    console.log('Success to delete RegularTransfer');
+  } catch (error) {
+    console.log('Failed to delete RegularTransfer');
+    // TODO: ログイン見直し
   }
 };
