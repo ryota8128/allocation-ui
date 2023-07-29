@@ -163,7 +163,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
                   type="text"
                   style={{ ...inputStyle, width: 150 }}
                   name="description"
-                  value={regular.description}
+                  value={regular.description ?? ''}
                   onChange={(e) => onChange(e, regular.id as number)}
                   onBlur={() => onBlur(regular)}
                 />
