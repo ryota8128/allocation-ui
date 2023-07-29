@@ -134,7 +134,7 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
                   type="text"
                   style={{ ...inputStyle, width: 150 }}
                   name="description"
-                  value={temporary.description}
+                  value={temporary.description ?? ''}
                   onChange={(e) => onChange(e, temporary.id as number)}
                   onBlur={() => onBlur(temporary)}
                 />
