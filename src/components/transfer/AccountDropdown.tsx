@@ -1,11 +1,7 @@
+import { addAccountWithApi, findOneAccountWithApi } from '@/lib/accountReq';
 import { NextPage } from 'next';
 import { useState } from 'react';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-} from 'reactstrap';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap';
 
 interface Props {
   accountList: Account[];
@@ -19,19 +15,28 @@ interface Props {
   ) => void;
 }
 
-const AccountDropdown: NextPage<Props> = ({
-  accountList,
-  transfer,
-  column,
-  onClickDropdown,
-}) => {
+const AccountDropdown: NextPage<Props> = ({ accountList, transfer, column, onClickDropdown }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const [newAccountName, setNewAccountName] = useState('');
 
   const title =
-    column === 'fromAccount'
-      ? transfer.fromAccountName ?? '---'
-      : transfer.toAccountName ?? '---';
+    column === 'fromAccount' ? transfer.fromAccountName ?? '---' : transfer.toAccountName ?? '---';
+
+  const onClickAddAccount = async () => {
+    await addAccountWithApi(newAccountName);
+    setNewAccountName('');
+    //findOneさっき追加したAccount
+    const newAccount = await findOneAccountWithApi(newAccountName);
+    // findOneしたのをセット
+    onClickDropdown(
+      transfer.id as number,
+      newAccount?.id as number,
+      newAccount?.name as string,
+      column
+    );
+    window.location.reload();
+  };
 
   return (
     <div className="d-flex">
@@ -59,6 +64,24 @@ const AccountDropdown: NextPage<Props> = ({
                 </DropdownItem>
               )
           )}
+          <DropdownItem header>
+            <div>
+              <Input
+                type="text"
+                placeholder="新規口座名"
+                style={{ width: 140, marginBottom: 10 }}
+                value={newAccountName}
+                onChange={(e) => {
+                  setNewAccountName(e.target.value);
+                }}
+              />
+              {newAccountName.length > 0 && (
+                <Button outline className="btn-sm" color="primary" onClick={onClickAddAccount}>
+                  追加
+                </Button>
+              )}
+            </div>
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>

@@ -19,3 +19,27 @@ export const addAccount = async (account: Account, token: string) => {
 
   const response = await axios.post(`${apiUrl}/api/account`, account, config);
 };
+
+export const addAccountWithApi = async (accountName: string) => {
+  const account: Account = { name: accountName };
+  try {
+    await axios.post('/api/account/insert', account);
+    console.log('Success to insert Account');
+  } catch (error) {
+    console.log('Failed to insert Account');
+  }
+};
+
+export const findOneAccountWithApi = async (name: string) => {
+  try {
+    const res = await axios.get('/api/account/findOneWithName', {
+      params: {
+        name,
+      },
+    });
+    const account: Account = res.data;
+    return account;
+  } catch (error) {
+    console.log('Failed to findOne Account');
+  }
+};
