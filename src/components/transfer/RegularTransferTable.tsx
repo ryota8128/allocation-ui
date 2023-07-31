@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { Button, Table } from 'reactstrap';
-import AccountDropdown from './table/AccountDropdown';
+import AccountDropdown from './table/dropdown/AccountDropdown';
 import { CSSProperties, useState } from 'react';
 import { deleteRegular, insertRegular, updateRegular } from '@/lib/regularReq';
 

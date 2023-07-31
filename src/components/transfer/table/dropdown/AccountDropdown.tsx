@@ -2,8 +2,6 @@ import { addAccountWithNameApi, findOneAccountWithApi } from '@/lib/accountReq';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap';
-import { flattenDiagnosticMessageText } from 'typescript';
-import SampleDropdown from '@/components/transfer/table/dropdown/SampleDropdown';
 import { PiDotsThreeOutlineLight } from 'react-icons/pi';
 
 interface Props {
