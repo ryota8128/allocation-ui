@@ -4,4 +4,5 @@ interface Account {
   numFreeTransfer?: number;
   transferFee?: number;
   ownerId?: number;
+  isChanged?: boolean;
 }
