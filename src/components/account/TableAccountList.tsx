@@ -58,9 +58,9 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
   };
 
   // 削除ボタン
-  const onClickDeleteAccount = (id: number) => {
+  const onClickDeleteAccount = async (id: number) => {
     try {
-      deleteAccountWithApi(id);
+      await deleteAccountWithApi(id);
       console.log('Success to delete Account');
       window.location.reload();
     } catch (error) {
