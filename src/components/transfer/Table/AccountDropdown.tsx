@@ -1,8 +1,7 @@
-import { addAccountWithApi, findOneAccountWithApi } from '@/lib/accountReq';
+import { addAccountWithNameApi, findOneAccountWithApi } from '@/lib/accountReq';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap';
-import AccountMenuDropdown from './dropdown/AccountMenuDropdown';
 import { flattenDiagnosticMessageText } from 'typescript';
 import SampleDropdown from '@/components/transfer/table/dropdown/SampleDropdown';
 import { PiDotsThreeOutlineLight } from 'react-icons/pi';
@@ -28,7 +27,7 @@ const AccountDropdown: NextPage<Props> = ({ accountList, transfer, column, onCli
     column === 'fromAccount' ? transfer.fromAccountName ?? '---' : transfer.toAccountName ?? '---';
 
   const onClickAddAccount = async () => {
-    await addAccountWithApi(newAccountName);
+    await addAccountWithNameApi(newAccountName);
     setNewAccountName('');
     //findOneさっき追加したAccount
     const newAccount = await findOneAccountWithApi(newAccountName);
