@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { Button, Table } from 'reactstrap';
-import AccountDropdown from './AccountDropdown';
+import AccountDropdown from './table/dropdown/AccountDropdown';
 import { CSSProperties, useState } from 'react';
 import { deleteTemporary, insertTemporary, updateTemporary } from '@/lib/temporaryReq';
 import Transfer from '@/types/Transfer';
