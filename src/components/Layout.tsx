@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import { Container, Nav, NavItem } from 'reactstrap';
+import NavDropdown from './common/NavDropdown';
 
 interface Props {
   children: ReactNode;
@@ -49,10 +50,11 @@ const Layout: NextPage<Props> = ({ children }) => {
               justifyContent: 'center',
             }}
           >
-            {status === 'authenticated' ? (
-              <Link className="navbar-brand" href="/">
-                {session.user?.name}
-              </Link>
+            {status === 'authenticated' && session.user.name ? (
+              // <Link className="navbar-brand" href="/">
+              //   {session.user?.name}
+              // </Link>
+              <NavDropdown username={session.user.name} />
             ) : (
               <Link className="navbar-brand" href="/">
                 ログイン
