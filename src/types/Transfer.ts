@@ -1,7 +1,7 @@
 type Transfer = {
-  id: number;
+  id?: number;
   title: string;
-  userId: number;
+  userId?: number;
 };
 
 export default Transfer;
