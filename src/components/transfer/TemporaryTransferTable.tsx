@@ -83,7 +83,7 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
 
   // 新規追加処理
   const onClickInsert = () => {
-    insertTemporary(transfer.id);
+    insertTemporary(transfer.id as number);
     window.location.reload();
   };
 
