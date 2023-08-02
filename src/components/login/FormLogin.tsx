@@ -6,7 +6,7 @@ import { signIn } from 'next-auth/react';
 type Props = {};
 
 export const FormLogin: React.FC<Props> = () => {
-  const [showPassword, setShowPassword] = useState<boolean>(true);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [user, setUser] = useState<User>({ username: '', password: '' });
 
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,24 +36,21 @@ export const FormLogin: React.FC<Props> = () => {
             placeholder="username"
             type="text"
             onChange={onChangeHandler}
+            style={{ width: 400 }}
           />
           <Label for="username">ユーザーネーム</Label>
         </FormGroup>{' '}
         <FormGroup floating>
-          <div
-            style={{ display: 'flex', alignItems: 'center' }}
-            className="search-box"
-          >
+          <div style={{ display: 'flex', alignItems: 'center' }} className="search-box">
             <Input
               id="password"
               name="password"
               placeholder="password"
               type={showPassword ? 'text' : 'password'}
               onChange={onChangeHandler}
+              style={{ width: 400 }}
             />
-            <span onClick={changeShowStatus}>
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </span>
+            <span onClick={changeShowStatus}>{showPassword ? <FaEye /> : <FaEyeSlash />}</span>
           </div>
           <Label for="password">パスワード</Label>
         </FormGroup>{' '}
