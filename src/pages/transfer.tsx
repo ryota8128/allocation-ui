@@ -1,12 +1,15 @@
 import RegularTransferTable from '@/components/transfer/RegularTransferTable';
 import TemporaryTransferTable from '@/components/transfer/TemporaryTransferTable';
 import { getAccountList } from '@/lib/accountReq';
-import { findRegular } from '@/lib/regularReq';
-import { findTemporary } from '@/lib/temporaryReq';
+import optimize from '@/lib/optimize';
+import { findRegular, findRegularWithApi } from '@/lib/regularReq';
+import { findTemporary, findTemporaryWithApi } from '@/lib/temporaryReq';
 import { findOneTransfer } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
 import { NextPage, GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
+import { useState } from 'react';
+import { Alert, Button } from 'reactstrap';
 
 interface Props {
   temporaryList: TemporaryTransfer[];
@@ -16,8 +19,22 @@ interface Props {
 }
 
 const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, accountList }) => {
+  const [errMsg, setErrMsg] = useState<string>('');
+  const onClickOptimize = async () => {
+    try {
+      const updateRegularList = await findRegularWithApi();
+      const updateTemporaryList = await findTemporaryWithApi(transfer.id as number);
+      optimize(updateRegularList, updateTemporaryList);
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrMsg(error.message);
+      }
+    }
+  };
+
   return (
     <div>
+      {errMsg !== '' && <Alert color="danger">{errMsg}</Alert>}
       <h1>{transfer.title}</h1>
 
       <h4>Regular Transfer</h4>
@@ -28,6 +45,22 @@ const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, a
         temporaryList={temporaryList}
         transfer={transfer}
       />
+      <div>
+        <Button
+          style={{
+            marginTop: 40,
+            width: 130,
+            height: 60,
+            position: 'absolute',
+            left: '40%',
+            fontSize: 22,
+          }}
+          color="primary"
+          onClick={onClickOptimize}
+        >
+          optimize
+        </Button>
+      </div>
     </div>
   );
 };
