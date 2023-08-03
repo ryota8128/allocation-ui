@@ -54,7 +54,7 @@ export const FormLogin: React.FC<Props> = () => {
           </div>
           <Label for="password">パスワード</Label>
         </FormGroup>{' '}
-        <Button>Submit</Button>
+        <Button>ログイン</Button>
       </Form>
     </>
   );
