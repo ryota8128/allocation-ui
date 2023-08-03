@@ -9,7 +9,7 @@ interface Props {
 const OptimizedTable: NextPage<Props> = ({ summary, accountList }) => {
   return (
     <div>
-      <Table>
+      <Table style={{ width: 630 }}>
         <thead>
           <tr>
             <th>from</th>

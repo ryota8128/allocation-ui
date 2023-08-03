@@ -17,7 +17,7 @@ const SummaryTable: NextPage<Props> = ({ summary, accountList }) => {
   console.log(sortedSummary);
   return (
     <div>
-      <Table>
+      <Table style={{ width: 630 }}>
         <thead>
           <tr>
             <td>account</td>
