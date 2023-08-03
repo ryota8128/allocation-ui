@@ -1,14 +1,8 @@
-import TransferSummary from '@/types/TransferSummary';
-
 type RtTransfer = {
   id?: number;
   fromAccount?: number;
   toAccount?: number;
   amount?: number;
-};
-
-type Summary = {
-  [key: number]: number;
 };
 
 export default function optimize(
@@ -21,8 +15,8 @@ export default function optimize(
   validate(rtList);
   // サマリーにまとめる
   const summary: Summary = integrate(rtList);
-  const result: TransferSummary[] = calcTransfers(summary);
-  return result;
+  const result: TransferSummary[] = calcTransfers({ ...summary });
+  return { result, summary };
 }
 
 function buildRtTransfer(
@@ -87,34 +81,34 @@ function integrate(rtList: RtTransfer[]) {
   return transferSummary;
 }
 
-function calcTransfers(accounts: { [key: number]: number }): TransferSummary[] {
+function calcTransfers(summary: Summary): TransferSummary[] {
   const transfers: TransferSummary[] = [];
 
-  const positiveAccounts: number[] = Object.keys(accounts)
+  const positiveAccounts: number[] = Object.keys(summary)
     .map(Number)
-    .filter((id) => accounts[id] > 0)
-    .sort((a, b) => accounts[a] - accounts[b]);
+    .filter((id) => summary[id] > 0)
+    .sort((a, b) => summary[a] - summary[b]);
 
-  const negativeAccounts: number[] = Object.keys(accounts)
+  const negativeAccounts: number[] = Object.keys(summary)
     .map(Number)
-    .filter((id) => accounts[id] < 0)
-    .sort((a, b) => accounts[b] - accounts[a]);
+    .filter((id) => summary[id] < 0)
+    .sort((a, b) => summary[b] - summary[a]);
 
   while (positiveAccounts.length > 0 && negativeAccounts.length > 0) {
     const fromAccount = negativeAccounts[0];
     const toAccount = positiveAccounts[0];
 
-    const amount = Math.min(Math.abs(accounts[fromAccount]), accounts[toAccount]);
+    const amount = Math.min(Math.abs(summary[fromAccount]), summary[toAccount]);
 
-    accounts[fromAccount] += amount;
-    accounts[toAccount] -= amount;
+    summary[fromAccount] += amount;
+    summary[toAccount] -= amount;
 
     transfers.push({ from: fromAccount, to: toAccount, amount });
 
-    if (accounts[fromAccount] === 0) {
+    if (summary[fromAccount] === 0) {
       negativeAccounts.shift();
     }
-    if (accounts[toAccount] === 0) {
+    if (summary[toAccount] === 0) {
       positiveAccounts.shift();
     }
   }

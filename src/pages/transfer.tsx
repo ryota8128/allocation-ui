@@ -7,11 +7,11 @@ import { findRegular, findRegularWithApi } from '@/lib/regularReq';
 import { findTemporary, findTemporaryWithApi } from '@/lib/temporaryReq';
 import { findOneTransfer } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
-import TransferSummary from '@/types/TransferSummary';
 import { NextPage, GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import { useState } from 'react';
 import { Alert, Button } from 'reactstrap';
+import SummaryTable from '@/components/transfer/SummaryTable';
 
 interface Props {
   temporaryList: TemporaryTransfer[];
@@ -22,15 +22,18 @@ interface Props {
 
 const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, accountList }) => {
   const [errMsg, setErrMsg] = useState<string>('');
-  const [optimizedSummary, setOptimizedSummary] = useState<TransferSummary[] | undefined>(
+  const [optimizedTransfer, setOptimizedTransfer] = useState<TransferSummary[] | undefined>(
     undefined
   );
+  const [transferSummary, setTransferSummary] = useState<Summary>({});
 
   const onClickOptimize = async () => {
     try {
       const updateRegularList = await findRegularWithApi();
       const updateTemporaryList = await findTemporaryWithApi(transfer.id as number);
-      setOptimizedSummary(optimize(updateRegularList, updateTemporaryList));
+      const { result, summary } = optimize(updateRegularList, updateTemporaryList);
+      setOptimizedTransfer(result);
+      setTransferSummary(summary);
     } catch (error) {
       if (error instanceof Error) {
         setErrMsg(error.message);
@@ -51,10 +54,12 @@ const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, a
         temporaryList={temporaryList}
         transfer={transfer}
       />
-      {optimizedSummary && (
+      {optimizedTransfer && (
         <div style={{ marginTop: 80 }}>
           <h4>Optimized Transfer</h4>
-          <OptimizedTable summary={optimizedSummary} accountList={accountList} />
+          <OptimizedTable summary={optimizedTransfer} accountList={accountList} />
+          <h4 style={{ marginTop: 30 }}>Transfer Summary</h4>
+          <SummaryTable summary={transferSummary} accountList={accountList} />
         </div>
       )}
       <div>
