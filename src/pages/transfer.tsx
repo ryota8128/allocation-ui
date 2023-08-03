@@ -1,3 +1,4 @@
+import OptimizedTable from '@/components/transfer/OptimizedTable';
 import RegularTransferTable from '@/components/transfer/RegularTransferTable';
 import TemporaryTransferTable from '@/components/transfer/TemporaryTransferTable';
 import { getAccountList } from '@/lib/accountReq';
@@ -6,6 +7,7 @@ import { findRegular, findRegularWithApi } from '@/lib/regularReq';
 import { findTemporary, findTemporaryWithApi } from '@/lib/temporaryReq';
 import { findOneTransfer } from '@/lib/transferReq';
 import Transfer from '@/types/Transfer';
+import TransferSummary from '@/types/TransferSummary';
 import { NextPage, GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -20,11 +22,15 @@ interface Props {
 
 const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, accountList }) => {
   const [errMsg, setErrMsg] = useState<string>('');
+  const [optimizedSummary, setOptimizedSummary] = useState<TransferSummary[] | undefined>(
+    undefined
+  );
+
   const onClickOptimize = async () => {
     try {
       const updateRegularList = await findRegularWithApi();
       const updateTemporaryList = await findTemporaryWithApi(transfer.id as number);
-      optimize(updateRegularList, updateTemporaryList);
+      setOptimizedSummary(optimize(updateRegularList, updateTemporaryList));
     } catch (error) {
       if (error instanceof Error) {
         setErrMsg(error.message);
@@ -33,7 +39,7 @@ const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, a
   };
 
   return (
-    <div>
+    <div style={{ marginBottom: 300 }}>
       {errMsg !== '' && <Alert color="danger">{errMsg}</Alert>}
       <h1>{transfer.title}</h1>
 
@@ -45,14 +51,19 @@ const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, a
         temporaryList={temporaryList}
         transfer={transfer}
       />
+      {optimizedSummary && (
+        <div style={{ marginTop: 80 }}>
+          <h4>Optimized Transfer</h4>
+          <OptimizedTable summary={optimizedSummary} accountList={accountList} />
+        </div>
+      )}
       <div>
         <Button
           style={{
             marginTop: 40,
             width: 130,
             height: 60,
-            position: 'absolute',
-            left: '40%',
+            marginLeft: '40%',
             fontSize: 22,
           }}
           color="primary"
