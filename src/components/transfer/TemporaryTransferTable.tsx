@@ -101,7 +101,7 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
           border: none;
         }
       `}</style>
-      <Table>
+      <Table style={{ width: 730 }}>
         <thead>
           <tr>
             <th>from</th>

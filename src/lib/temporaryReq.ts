@@ -30,6 +30,15 @@ export const findTemporary = async (token: string, transferId: number) => {
   }
 };
 
+export const findTemporaryWithApi = async (id: number) => {
+  try {
+    const res = await axios.get(`/api/temporary/find?transferId=${id}`);
+    return res.data as TemporaryTransfer[];
+  } catch (error) {
+    throw new Error('非定期振替の取得に失敗しました');
+  }
+};
+
 export const updateTemporary = async (temporary: TemporaryTransfer) => {
   try {
     await axios.patch('/api/temporary/update', temporary);

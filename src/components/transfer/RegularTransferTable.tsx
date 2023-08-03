@@ -128,7 +128,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
           border: none;
         }
       `}</style>
-      <Table style={{ marginBottom: 0 }}>
+      <Table style={{ marginBottom: 0, width: 700 }}>
         <thead>
           <tr>
             <th>from</th>
