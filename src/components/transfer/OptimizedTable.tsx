@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import { Table } from 'reactstrap';
-import TransferSummary from '@/types/TransferSummary';
 
 interface Props {
   summary: TransferSummary[];
@@ -32,7 +31,7 @@ const OptimizedTable: NextPage<Props> = ({ summary, accountList }) => {
             });
 
             return (
-              <tr>
+              <tr key={`${s.from}-${s.to}`}>
                 <td>{fromName}</td>
                 <td>{toName}</td>
                 <td>{s.amount}</td>
