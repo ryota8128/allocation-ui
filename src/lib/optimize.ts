@@ -1,5 +1,4 @@
-import toast from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
+import TransferSummary from '@/types/TransferSummary';
 
 type RtTransfer = {
   id?: number;
@@ -10,12 +9,6 @@ type RtTransfer = {
 
 type Summary = {
   [key: number]: number;
-};
-
-type TransferSummary = {
-  from: number;
-  to: number;
-  amount: number;
 };
 
 export default function optimize(
@@ -29,7 +22,7 @@ export default function optimize(
   // サマリーにまとめる
   const summary: Summary = integrate(rtList);
   const result: TransferSummary[] = calcTransfers(summary);
-  console.log(result);
+  return result;
 }
 
 function buildRtTransfer(
