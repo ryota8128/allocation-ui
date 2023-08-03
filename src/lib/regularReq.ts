@@ -1,4 +1,3 @@
-import RegularTransferTable from '@/components/transfer/RegularTransferTable';
 import axios from 'axios';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -24,6 +23,15 @@ export const findRegular = async (token: string) => {
     // TODO: ログインし直し
     console.log('Failed to find RegularTransferList');
     return;
+  }
+};
+
+export const findRegularWithApi = async () => {
+  try {
+    const res = await axios.get('/api/regular/find');
+    return res.data as RegularTransfer[];
+  } catch (error) {
+    throw new Error('定期振替の取得に失敗しました');
   }
 };
 
