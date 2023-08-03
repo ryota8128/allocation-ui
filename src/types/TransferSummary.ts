@@ -3,5 +3,3 @@ type TransferSummary = {
   to: number;
   amount: number;
 };
-
-export default TransferSummary;
