@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { NextPage } from 'next';
+import { signIn } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
@@ -34,9 +36,24 @@ const UserAddPage: NextPage<Props> = () => {
     }
   }, [user, confirmPassword]);
 
+  const userAdd = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('user add start');
+    try {
+      await axios.post('/api/user/insert', user);
+      signIn('credentials', {
+        username: user.username,
+        password: user.password,
+        callbackUrl: '/?add=success',
+      });
+    } catch (error) {
+      console.log('ユーザ登録失敗');
+    }
+  };
+
   return (
     <div>
-      <Form onSubmit={() => {}}>
+      <Form onSubmit={userAdd}>
         <FormGroup floating>
           <Input
             id="username"
@@ -74,6 +91,8 @@ const UserAddPage: NextPage<Props> = () => {
             </span>
           </div>
           <Label for="password">パスワード</Label>
+        </FormGroup>
+        <FormGroup>
           <div style={{ display: 'flex', alignItems: 'center' }} className="search-box">
             <Input
               id="password"
@@ -87,9 +106,18 @@ const UserAddPage: NextPage<Props> = () => {
               {showPassword2 ? <FaEye /> : <FaEyeSlash />}
             </span>
           </div>
+          {!isPasswordMatched && (user.password || confirmPassword) && (
+            <div style={{ color: 'red' }}>
+              <small>パスワードが一致していません</small>
+            </div>
+          )}
           <Label for="confirmPassword">パスワード確認用</Label>
         </FormGroup>
-        <Button disabled={!isPasswordMatched} color={isPasswordMatched ? 'primary' : 'secondary'}>
+        <Button
+          type="submit"
+          disabled={!isPasswordMatched}
+          color={isPasswordMatched ? 'primary' : 'secondary'}
+        >
           登録
         </Button>
       </Form>
