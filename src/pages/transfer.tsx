@@ -12,6 +12,7 @@ import { getSession } from 'next-auth/react';
 import { useState } from 'react';
 import { Alert, Button } from 'reactstrap';
 import SummaryTable from '@/components/transfer/SummaryTable';
+import TransferTitle from '@/components/transfer/TransferTitle';
 
 interface Props {
   temporaryList: TemporaryTransfer[];
@@ -44,7 +45,12 @@ const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, a
   return (
     <div style={{ marginBottom: 300 }}>
       {errMsg !== '' && <Alert color="danger">{errMsg}</Alert>}
-      <h1>{transfer.title}</h1>
+
+      <TransferTitle
+        title={transfer.title}
+        transferId={transfer.id as number}
+        setErrorMsg={setErrMsg}
+      />
 
       <h4>Regular Transfer</h4>
       <RegularTransferTable regularList={regularList} accountList={accountList} />
