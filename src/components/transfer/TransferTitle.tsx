@@ -23,6 +23,8 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editingTitle, setEditingTitle] = useState(title);
+  const [updatedTitle, setUpdatedTitle] = useState(title);
+  const titleInput = useRef<HTMLInputElement>(null);
 
   const toggle = () => setModal(!modal);
 
@@ -81,9 +83,18 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
       };
       await axios.patch(`/api/transfer/update`, newTransfer);
       console.log('Transferのタイトルを更新しました');
-      router.reload();
+      setUpdatedTitle(editingTitle);
     } catch (error) {
       setErrorMsg('タイトルの更新に失敗しました');
+    } finally {
+      setEditing(false);
+    }
+  };
+
+  const handleClickEditIcon = async () => {
+    await setEditing(true);
+    if (titleInput.current) {
+      titleInput.current.focus();
     }
   };
 
@@ -107,6 +118,7 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
           </Button>
         </ModalFooter>
       </Modal>
+
       <div
         ref={titleDiv}
         onMouseOver={() => handleMouseOver('div')}
@@ -116,9 +128,11 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
         {editing ? (
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Input
+              innerRef={titleInput}
               onChange={(e) => setEditingTitle(e.target.value)}
               value={editingTitle}
               style={{ fontSize: 36, height: 50 }}
+              onBlur={() => setEditing(false)}
             />
             <Button
               color="primary"
@@ -131,7 +145,7 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
           </div>
         ) : (
           <>
-            <h1>{title}</h1>
+            <h1>{updatedTitle}</h1>
             {isHover && (
               <>
                 <LiaEditSolid
@@ -139,7 +153,7 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
                   style={isHoverEdit ? { ...editIconStyle, ...hoverStyle } : editIconStyle}
                   onMouseOver={() => handleMouseOver('edit')}
                   onMouseOut={() => handleMouseOut('edit')}
-                  onClick={() => setEditing(true)}
+                  onClick={handleClickEditIcon}
                 />
                 <RiDeleteBin5Line
                   size={30}
