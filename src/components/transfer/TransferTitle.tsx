@@ -25,6 +25,7 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
   const [editingTitle, setEditingTitle] = useState(title);
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const titleInput = useRef<HTMLInputElement>(null);
+  const titleEditDiv = useRef<HTMLDivElement>(null);
 
   const toggle = () => setModal(!modal);
 
@@ -98,6 +99,24 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!editing) return;
+
+      if (titleEditDiv.current && !titleEditDiv.current.contains(event.target as Node)) {
+        setEditing(false);
+      }
+    };
+
+    // グローバルなクリックイベントリスナーを追加
+    document.addEventListener('click', handleClickOutside);
+
+    // コンポーネントがアンマウントされた時にクリックイベントリスナーを削除
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <Modal isOpen={modal} toggle={toggle} size="lg" backdrop={true} fade>
@@ -126,13 +145,12 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
         style={{ display: 'flex', alignItems: 'center' }}
       >
         {editing ? (
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div ref={titleEditDiv} style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Input
               innerRef={titleInput}
               onChange={(e) => setEditingTitle(e.target.value)}
               value={editingTitle}
               style={{ fontSize: 36, height: 50 }}
-              onBlur={() => setEditing(false)}
             />
             <Button
               color="primary"
