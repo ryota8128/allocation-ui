@@ -32,7 +32,7 @@ const TransferPage: NextPage<Props> = ({ temporaryList, regularList, transfer, a
     try {
       const updateRegularList = await findRegularWithApi();
       const updateTemporaryList = await findTemporaryWithApi(transfer.id as number);
-      const { result, summary } = optimize(updateRegularList, updateTemporaryList);
+      const { result, summary } = optimize(updateRegularList, updateTemporaryList, accountList);
       setOptimizedTransfer(result);
       setTransferSummary(summary);
     } catch (error) {

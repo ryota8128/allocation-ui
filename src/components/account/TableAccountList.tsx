@@ -208,6 +208,10 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                     追加
                   </Button>
                 </td>
+                {/* TODO 追加時に経由口座を選択できるようにする */}
+                {/* <td>
+                  <AccountDropdownInAccountList accountList={accountList} />
+                </td> */}
               </tr>
             </>
           )}
