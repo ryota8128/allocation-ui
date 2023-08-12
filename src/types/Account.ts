@@ -5,4 +5,5 @@ interface Account {
   transferFee?: number;
   ownerId?: number;
   isChanged?: boolean;
+  via?: number;
 }
