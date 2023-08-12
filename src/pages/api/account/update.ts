@@ -15,12 +15,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    await axios.patch(`${apiUrl}/api/account`, req.body, {
+    const apiRes = await axios.patch(`${apiUrl}/api/account`, req.body, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       withCredentials: true,
     });
+    return res.status(apiRes.status).json({ msg: '口座の更新に成功しました' });
   } catch (error) {
     return res.status(401).json({ error: '口座登録に失敗しました' });
   }

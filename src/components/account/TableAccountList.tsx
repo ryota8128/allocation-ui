@@ -2,7 +2,7 @@ import { addAccountWithApi, deleteAccountWithApi, updateAccountWithApi } from '@
 import { NextPage } from 'next';
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Button, Table } from 'reactstrap';
-import { error } from 'console';
+import AccountDropdownInAccountList from './AccountDropdownInAccountList';
 
 interface Props {
   accountList: Account[];
@@ -116,10 +116,11 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
       `}</style>
       <Table>
         <thead>
-          <tr>
+          <tr style={{ whiteSpace: 'nowrap' }}>
             <th>口座名</th>
             <th>無料振込回数</th>
             <th>振込手数料</th>
+            <th>経由口座</th>
           </tr>
         </thead>
         <tbody>
@@ -154,6 +155,9 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                   onBlur={() => onBlurUpdate(account)}
                   style={{ ...inputStyle, width: 100 }}
                 />
+              </td>
+              <td>
+                <AccountDropdownInAccountList accountList={accountList} account={account} />
               </td>
               <td>
                 <Button
