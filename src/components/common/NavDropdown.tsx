@@ -3,12 +3,14 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, NavItem, NavLink 
 import { CSSProperties, useState } from 'react';
 import Link from 'next/link';
 import { LinkButton } from './LinkButton';
+import { useRouter } from 'next/router';
 
 interface Props {
   username: string;
 }
 
 const NavDropdown: NextPage<Props> = ({ username }) => {
+  const router = useRouter();
   const navToggleStyle: CSSProperties = {
     fontSize: 22,
     color: '#fff',
@@ -20,6 +22,10 @@ const NavDropdown: NextPage<Props> = ({ username }) => {
     setIsOpen((prev) => !prev);
   };
 
+  const onClickDropdownItem = (path: string) => {
+    router.push(path);
+  };
+
   return (
     <div>
       <Dropdown toggle={toggle} isOpen={isOpen} direction="down">
@@ -27,15 +33,17 @@ const NavDropdown: NextPage<Props> = ({ username }) => {
           {username}
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem>
-            <Link href="/user" style={{ textDecoration: 'none' }}>
-              ユーザ情報
-            </Link>
+          <DropdownItem
+            style={{ textAlign: 'center' }}
+            onClick={() => onClickDropdownItem('/user')}
+          >
+            ユーザ情報
           </DropdownItem>
-          <DropdownItem>
-            <Link href="/account/list" style={{ textDecoration: 'none' }}>
-              口座情報
-            </Link>
+          <DropdownItem
+            style={{ textAlign: 'center' }}
+            onClick={() => onClickDropdownItem('/account/list')}
+          >
+            口座情報
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
