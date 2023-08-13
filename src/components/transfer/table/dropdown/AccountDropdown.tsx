@@ -46,16 +46,16 @@ const AccountDropdown: NextPage<Props> = ({ accountList, transfer, column, onCli
           {title}
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem header>口座選択</DropdownItem>
+          <DropdownItem header style={{ textAlign: 'center' }}>
+            口座選択
+          </DropdownItem>
           {accountList.map(
             (account) =>
               account.name !== title && (
                 <DropdownItem
                   key={account.id}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    textAlign: 'center',
                     cursor: 'default',
                   }}
                   onClick={() =>

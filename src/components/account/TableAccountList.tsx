@@ -118,10 +118,10 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
       <Table>
         <thead>
           <tr style={{ whiteSpace: 'nowrap' }}>
-            <th>口座名</th>
-            <th>無料振込回数</th>
-            <th>振込手数料</th>
-            <th>経由口座</th>
+            <th style={{ textAlign: 'center' }}>口座名</th>
+            <th style={{ textAlign: 'center' }}>無料振込回数</th>
+            <th style={{ textAlign: 'center' }}>振込手数料</th>
+            <th style={{ textAlign: 'center' }}>経由口座</th>
           </tr>
         </thead>
         <tbody>
@@ -134,7 +134,7 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                   name="name"
                   onChange={(e) => onChangeAccount(account.id as number, e)}
                   onBlur={() => onBlurUpdate(account)}
-                  style={{ ...inputStyle, width: 140 }}
+                  style={{ ...inputStyle, width: 140, textAlign: 'center' }}
                 />
               </td>
               <td>
@@ -144,7 +144,7 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                   name="numFreeTransfer"
                   onChange={(e) => onChangeAccount(account.id as number, e)}
                   onBlur={() => onBlurUpdate(account)}
-                  style={{ ...inputStyle, width: 100 }}
+                  style={{ ...inputStyle, width: 100, textAlign: 'center' }}
                 />
               </td>
               <td>
@@ -154,7 +154,7 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                   name="transferFee"
                   onChange={(e) => onChangeAccount(account.id as number, e)}
                   onBlur={() => onBlurUpdate(account)}
-                  style={{ ...inputStyle, width: 100 }}
+                  style={{ ...inputStyle, width: 100, textAlign: 'center' }}
                 />
               </td>
               <td>
