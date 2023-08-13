@@ -131,12 +131,12 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
       <Table style={{ marginBottom: 0, width: 700 }}>
         <thead>
           <tr>
-            <th>from</th>
-            <th>to</th>
-            <th>description</th>
-            <th>amount</th>
-            <th>ratio</th>
-            <th>ratio flag</th>
+            <th style={{ textAlign: 'center' }}>from</th>
+            <th style={{ textAlign: 'center' }}>to</th>
+            <th style={{ textAlign: 'center' }}>description</th>
+            <th style={{ textAlign: 'center' }}>amount</th>
+            <th style={{ textAlign: 'center' }}>ratio</th>
+            <th style={{ textAlign: 'center' }}>ratio flag</th>
           </tr>
         </thead>
         <tbody>
@@ -161,7 +161,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
               <td>
                 <input
                   type="text"
-                  style={{ ...inputStyle, width: 150 }}
+                  style={{ ...inputStyle, width: 150, textAlign: 'right' }}
                   name="description"
                   value={regular.description ?? ''}
                   onChange={(e) => onChange(e, regular.id as number)}
@@ -172,7 +172,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
                 <td>
                   <input
                     type="number"
-                    style={{ ...inputStyle, width: 100 }}
+                    style={{ ...inputStyle, width: 100, textAlign: 'right', fontFamily: 'Lining' }}
                     name="amount"
                     value={regular.amount}
                     onChange={(e) => onChange(e, regular.id as number)}

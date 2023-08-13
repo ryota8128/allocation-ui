@@ -1,3 +1,4 @@
+import { formatNumberWithCommas } from '@/lib/Utils';
 import { NextPage } from 'next';
 import { Table } from 'reactstrap';
 
@@ -12,9 +13,9 @@ const OptimizedTable: NextPage<Props> = ({ summary, accountList }) => {
       <Table style={{ width: 630 }}>
         <thead>
           <tr>
-            <th>from</th>
-            <th>to</th>
-            <th>amount</th>
+            <th style={{ textAlign: 'center' }}>from</th>
+            <th style={{ textAlign: 'center' }}>to</th>
+            <th style={{ textAlign: 'center' }}>amount</th>
           </tr>
         </thead>
         <tbody>
@@ -31,10 +32,12 @@ const OptimizedTable: NextPage<Props> = ({ summary, accountList }) => {
             });
 
             return (
-              <tr key={`${s.from}-${s.to}`}>
-                <td>{fromName}</td>
-                <td>{toName}</td>
-                <td>{s.amount}</td>
+              <tr key={`${s.from}+${accountList.length * s.to}`}>
+                <td style={{ textAlign: 'center' }}>{fromName}</td>
+                <td style={{ textAlign: 'center' }}>{toName}</td>
+                <td style={{ fontFamily: 'Lining', textAlign: 'right', paddingRight: 160 }}>
+                  {formatNumberWithCommas(s.amount)}
+                </td>
               </tr>
             );
           })}

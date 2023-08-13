@@ -34,14 +34,14 @@ const AccountDropdownInAccountList: NextPage<Props> = ({ accountList, account })
           {previewName}
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem header>口座選択</DropdownItem>
+          <DropdownItem header style={{ textAlign: 'center' }}>
+            口座選択
+          </DropdownItem>
           {/* 口座が指定してある場合は，選択解除する選択肢を追加 */}
           {previewName !== '---' && (
             <DropdownItem
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
+                textAlign: 'center',
                 cursor: 'default',
               }}
               onClick={() => onClickAccountName(-1)}
@@ -57,9 +57,7 @@ const AccountDropdownInAccountList: NextPage<Props> = ({ accountList, account })
                 <DropdownItem
                   key={account.id}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
+                    textAlign: 'center',
                     cursor: 'default',
                   }}
                   onClick={() => onClickAccountName(account.id as number)}
