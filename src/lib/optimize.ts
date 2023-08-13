@@ -24,8 +24,10 @@ export default function optimize(
   // 経由地への振替サマリとそれ以外の振替サマリを合算
   const allTSList: TransferSummary[] = total(viaTSList, nonViaTSList);
   const allSummary: Summary = totalSummary(viaSummary, nonViaSummary);
+  // TSListをamountの降順でソート
+  const sortedTSList: TransferSummary[] = sortTSList(allTSList);
 
-  return { result: allTSList, summary: allSummary };
+  return { result: sortedTSList, summary: allSummary };
 }
 
 function buildRtTransfer(
@@ -213,4 +215,9 @@ function calcSummary(summary: Summary, fromId: number, toId: number, amount: num
     // キーが存在しない場合は新しい値を設定
     summary[toId] = amount;
   }
+}
+
+function sortTSList(allTSList: TransferSummary[]) {
+  allTSList.sort((ts1, ts2) => ts2.amount - ts1.amount);
+  return allTSList;
 }
