@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { Table } from 'reactstrap';
+import { formatNumberWithCommas } from '../../lib/Utils';
 
 interface Props {
   summary: Summary;
@@ -19,15 +20,17 @@ const SummaryTable: NextPage<Props> = ({ summary, accountList }) => {
       <Table style={{ width: 630 }}>
         <thead>
           <tr>
-            <td>account</td>
-            <td>amount</td>
+            <th style={{ textAlign: 'center' }}>account</th>
+            <th style={{ textAlign: 'center' }}>amount</th>
           </tr>
         </thead>
         <tbody>
           {sortedSummary.map(([accountName, amount]) => (
             <tr key={accountName}>
-              <td>{accountName}</td>
-              <td>{amount}</td>
+              <td style={{ textAlign: 'center' }}>{accountName}</td>
+              <td style={{ fontFamily: 'Lining', textAlign: 'right', paddingRight: 200 }}>
+                {formatNumberWithCommas(amount as number)}
+              </td>
             </tr>
           ))}
         </tbody>

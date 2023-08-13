@@ -104,10 +104,10 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
       <Table style={{ width: 730 }}>
         <thead>
           <tr>
-            <th>from</th>
-            <th>to</th>
-            <th>description</th>
-            <th>amount</th>
+            <th style={{ textAlign: 'center' }}>from</th>
+            <th style={{ textAlign: 'center' }}>to</th>
+            <th style={{ textAlign: 'center' }}>description</th>
+            <th style={{ textAlign: 'center' }}>amount</th>
           </tr>
         </thead>
         <tbody>
@@ -132,7 +132,7 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
               <td>
                 <input
                   type="text"
-                  style={{ ...inputStyle, width: 150 }}
+                  style={{ ...inputStyle, width: 150, textAlign: 'right' }}
                   name="description"
                   value={temporary.description ?? ''}
                   onChange={(e) => onChange(e, temporary.id as number)}
@@ -142,7 +142,7 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
               <td>
                 <input
                   type="number"
-                  style={{ ...inputStyle, width: 100 }}
+                  style={{ ...inputStyle, width: 100, fontFamily: 'Lining', textAlign: 'right' }}
                   name="amount"
                   value={temporary.amount}
                   onChange={(e) => onChange(e, temporary.id as number)}
