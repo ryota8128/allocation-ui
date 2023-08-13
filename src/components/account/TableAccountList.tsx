@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { Button, Table } from 'reactstrap';
 import AccountDropdownInAccountList from './AccountDropdownInAccountList';
+import SelectViaWhenAddAccount from './SelectViaWhenAddAccount';
 
 interface Props {
   accountList: Account[];
@@ -204,14 +205,17 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                   />
                 </td>
                 <td>
+                  <SelectViaWhenAddAccount
+                    accountList={accountList}
+                    account={newAccount}
+                    setNewAccount={setNewAccount}
+                  />
+                </td>
+                <td>
                   <Button outline className="btn-sm" color="primary" onClick={onClickInsertAccount}>
                     追加
                   </Button>
                 </td>
-                {/* TODO 追加時に経由口座を選択できるようにする */}
-                {/* <td>
-                  <AccountDropdownInAccountList accountList={accountList} />
-                </td> */}
               </tr>
             </>
           )}
