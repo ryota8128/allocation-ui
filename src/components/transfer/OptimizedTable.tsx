@@ -16,6 +16,7 @@ const OptimizedTable: NextPage<Props> = ({ summary, accountList }) => {
             <th style={{ textAlign: 'center' }}>from</th>
             <th style={{ textAlign: 'center' }}>to</th>
             <th style={{ textAlign: 'center' }}>amount</th>
+            <th style={{ textAlign: 'center' }}>done</th>
           </tr>
         </thead>
         <tbody>
@@ -35,8 +36,11 @@ const OptimizedTable: NextPage<Props> = ({ summary, accountList }) => {
               <tr key={`${s.from}+${accountList.length * s.to}`}>
                 <td style={{ textAlign: 'center' }}>{fromName}</td>
                 <td style={{ textAlign: 'center' }}>{toName}</td>
-                <td style={{ fontFamily: 'Lining', textAlign: 'right', paddingRight: 160 }}>
+                <td style={{ fontFamily: 'Lining', textAlign: 'right', paddingRight: 40 }}>
                   {formatNumberWithCommas(s.amount)}
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                  <input type="checkbox" />
                 </td>
               </tr>
             );
