@@ -16,8 +16,8 @@ const SummaryTable: NextPage<Props> = ({ summary, accountList }) => {
     });
 
   return (
-    <div>
-      <Table style={{ width: 630 }}>
+    <div style={{ overflowX: 'auto' }}>
+      <Table style={{ width: '630px' }}>
         <thead>
           <tr>
             <th style={{ textAlign: 'center' }}>account</th>
