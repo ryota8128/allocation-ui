@@ -128,98 +128,105 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
           border: none;
         }
       `}</style>
-      <Table style={{ marginBottom: 0, width: 700 }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: 'center' }}>from</th>
-            <th style={{ textAlign: 'center' }}>to</th>
-            <th style={{ textAlign: 'center' }}>description</th>
-            <th style={{ textAlign: 'center' }}>amount</th>
-            <th style={{ textAlign: 'center' }}>ratio</th>
-            <th style={{ textAlign: 'center' }}>ratio flag</th>
-          </tr>
-        </thead>
-        <tbody>
-          {updatedRegularList.map((regular) => (
-            <tr key={regular.id}>
-              <td>
-                <AccountDropdown
-                  accountList={accountList}
-                  transfer={regular}
-                  column="fromAccount"
-                  onClickDropdown={onClickDropdown}
-                />
-              </td>
-              <td>
-                <AccountDropdown
-                  accountList={accountList}
-                  transfer={regular}
-                  column="toAccount"
-                  onClickDropdown={onClickDropdown}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  style={{ ...inputStyle, width: 150, textAlign: 'right' }}
-                  name="description"
-                  value={regular.description ?? ''}
-                  onChange={(e) => onChange(e, regular.id as number)}
-                  onBlur={() => onBlur(regular)}
-                />
-              </td>
-              {regular.percentage == false ? (
-                <td>
-                  <input
-                    type="number"
-                    style={{ ...inputStyle, width: 100, textAlign: 'right', fontFamily: 'Lining' }}
-                    name="amount"
-                    value={regular.amount}
-                    onChange={(e) => onChange(e, regular.id as number)}
-                    onBlur={() => onBlur(regular)}
-                  />
-                </td>
-              ) : (
-                <td>---</td>
-              )}
-
-              {regular.percentage == true ? (
-                <td>
-                  <input
-                    type="number"
-                    style={{ ...inputStyle, width: 100 }}
-                    name="ratio"
-                    value={regular.ratio}
-                    onChange={(e) => onChange(e, regular.id as number)}
-                    onBlur={() => onBlur(regular)}
-                  />
-                </td>
-              ) : (
-                <td>---</td>
-              )}
-
-              <td style={{ textAlign: 'center' }}>
-                <input
-                  type="checkbox"
-                  checked={regular.percentage}
-                  onChange={(e) => onChangeCheckbox(e, regular.id as number)}
-                  name="percentage"
-                />
-              </td>
-              <td>
-                <Button
-                  outline
-                  className="btn-sm"
-                  color="danger"
-                  onClick={() => onClickDeleteButton(regular.id as number)}
-                >
-                  削除
-                </Button>
-              </td>
+      <div style={{ overflowX: 'auto' }}>
+        <Table style={{ marginBottom: 0, width: '700px' }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'center' }}>from</th>
+              <th style={{ textAlign: 'center' }}>to</th>
+              <th style={{ textAlign: 'center' }}>description</th>
+              <th style={{ textAlign: 'center' }}>amount</th>
+              <th style={{ textAlign: 'center' }}>ratio</th>
+              <th style={{ textAlign: 'center' }}>ratio flag</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {updatedRegularList.map((regular) => (
+              <tr key={regular.id}>
+                <td>
+                  <AccountDropdown
+                    accountList={accountList}
+                    transfer={regular}
+                    column="fromAccount"
+                    onClickDropdown={onClickDropdown}
+                  />
+                </td>
+                <td>
+                  <AccountDropdown
+                    accountList={accountList}
+                    transfer={regular}
+                    column="toAccount"
+                    onClickDropdown={onClickDropdown}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ ...inputStyle, width: 150, textAlign: 'right' }}
+                    name="description"
+                    value={regular.description ?? ''}
+                    onChange={(e) => onChange(e, regular.id as number)}
+                    onBlur={() => onBlur(regular)}
+                  />
+                </td>
+                {regular.percentage == false ? (
+                  <td>
+                    <input
+                      type="number"
+                      style={{
+                        ...inputStyle,
+                        width: 100,
+                        textAlign: 'right',
+                        fontFamily: 'Lining',
+                      }}
+                      name="amount"
+                      value={regular.amount}
+                      onChange={(e) => onChange(e, regular.id as number)}
+                      onBlur={() => onBlur(regular)}
+                    />
+                  </td>
+                ) : (
+                  <td>---</td>
+                )}
+
+                {regular.percentage == true ? (
+                  <td>
+                    <input
+                      type="number"
+                      style={{ ...inputStyle, width: 100 }}
+                      name="ratio"
+                      value={regular.ratio}
+                      onChange={(e) => onChange(e, regular.id as number)}
+                      onBlur={() => onBlur(regular)}
+                    />
+                  </td>
+                ) : (
+                  <td>---</td>
+                )}
+
+                <td style={{ textAlign: 'center' }}>
+                  <input
+                    type="checkbox"
+                    checked={regular.percentage}
+                    onChange={(e) => onChangeCheckbox(e, regular.id as number)}
+                    name="percentage"
+                  />
+                </td>
+                <td>
+                  <Button
+                    outline
+                    className="btn-sm"
+                    color="danger"
+                    onClick={() => onClickDeleteButton(regular.id as number)}
+                  >
+                    削除
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       <Button className="btn-sm" onClick={onClickInsert}>
         新規追加
       </Button>

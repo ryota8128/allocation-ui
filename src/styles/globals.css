@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; /* 横方向の中央揃え */
 }
 
 a {
