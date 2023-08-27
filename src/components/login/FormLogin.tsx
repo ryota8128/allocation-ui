@@ -29,34 +29,43 @@ export const FormLogin: React.FC<Props> = () => {
 
   return (
     <>
-      <Form onSubmit={login}>
-        <FormGroup floating>
-          <Input
-            id="username"
-            name="username"
-            placeholder="username"
-            type="text"
-            onChange={onChangeHandler}
-            className={styles.login_form}
-          />
-          <Label for="username">ユーザーネーム</Label>
-        </FormGroup>{' '}
-        <FormGroup floating>
-          <div style={{ display: 'flex', alignItems: 'center' }} className="search-box">
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Form onSubmit={login}>
+          <FormGroup floating>
             <Input
-              id="password"
-              name="password"
-              placeholder="password"
-              type={showPassword ? 'text' : 'password'}
+              id="username"
+              name="username"
+              placeholder="username"
+              type="text"
               onChange={onChangeHandler}
               className={styles.login_form}
             />
-            <span onClick={changeShowStatus}>{showPassword ? <FaEye /> : <FaEyeSlash />}</span>
-          </div>
-          <Label for="password">パスワード</Label>
-        </FormGroup>{' '}
-        <Button>ログイン</Button>
-      </Form>
+            <Label for="username">ユーザーネーム</Label>
+          </FormGroup>{' '}
+          <FormGroup floating>
+            <div style={{ display: 'flex', alignItems: 'center' }} className="search-box">
+              <Input
+                id="password"
+                name="password"
+                placeholder="password"
+                type={showPassword ? 'text' : 'password'}
+                onChange={onChangeHandler}
+                className={styles.login_form}
+              />
+              <span onClick={changeShowStatus}>{showPassword ? <FaEye /> : <FaEyeSlash />}</span>
+            </div>
+            <Label for="password">パスワード</Label>
+          </FormGroup>{' '}
+          <Button>ログイン</Button>
+        </Form>
+      </div>
     </>
   );
 };
