@@ -2,6 +2,7 @@ import React, { MouseEventHandler, useState } from 'react';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { signIn } from 'next-auth/react';
+import styles from './FormLogin.module.css';
 
 type Props = {};
 
@@ -36,7 +37,7 @@ export const FormLogin: React.FC<Props> = () => {
             placeholder="username"
             type="text"
             onChange={onChangeHandler}
-            style={{ width: 400 }}
+            className={styles.login_form}
           />
           <Label for="username">ユーザーネーム</Label>
         </FormGroup>{' '}
@@ -48,7 +49,7 @@ export const FormLogin: React.FC<Props> = () => {
               placeholder="password"
               type={showPassword ? 'text' : 'password'}
               onChange={onChangeHandler}
-              style={{ width: 400 }}
+              className={styles.login_form}
             />
             <span onClick={changeShowStatus}>{showPassword ? <FaEye /> : <FaEyeSlash />}</span>
           </div>
