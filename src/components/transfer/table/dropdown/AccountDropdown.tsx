@@ -6,7 +6,7 @@ import { PiDotsThreeOutlineLight } from 'react-icons/pi';
 
 interface Props {
   accountList: Account[];
-  transfer: TemporaryTransfer | RegularTransfer;
+  transfer: TemporaryTransfer | RegularTransfer | TemplateTransfer;
   column: 'fromAccount' | 'toAccount';
   onClickDropdown: (
     id: number,
