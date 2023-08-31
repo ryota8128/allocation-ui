@@ -1,19 +1,19 @@
 import { NextPage } from 'next';
 import { Table, Form } from 'reactstrap';
 import AccountDropdown from './table/dropdown/AccountDropdown';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import axios from 'axios';
 import { CSSProperties } from 'react';
 
 interface Props {
   templateList: TemplateTransfer[];
   accountList: Account[];
+  setErrMsg: Dispatch<SetStateAction<string>>;
 }
 
-const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList }) => {
+const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, setErrMsg }) => {
   const [defaultTemplateList, setDefaultTemplateList] = useState<TemplateTransfer[]>(templateList);
   const [updatedTemplateList, setUpdatedTemplateList] = useState<TemplateTransfer[]>(templateList);
-  const [errorMsg, setErrorMsg] = useState('');
 
   const inputStyle: CSSProperties = {
     border: 'none',
@@ -26,7 +26,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList }) =
       console.log('Success to update TemplateTransfer');
     } catch (error) {
       console.log('Failed to update TemplateTransfer');
-      setErrorMsg('Template Transferの更新に失敗しました．');
+      setErrMsg('Template Transferの更新に失敗しました．');
     }
   };
 
@@ -85,7 +85,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList }) =
       console.log('Success to update Template Transfer');
     } catch (error) {
       console.warn('Failed to update Template Transfer');
-      setErrorMsg('Template Transferの更新に失敗しました．');
+      setErrMsg('Template Transferの更新に失敗しました．');
       return;
     }
 
