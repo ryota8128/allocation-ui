@@ -5,4 +5,5 @@ type TemplateTransfer = {
   fromAccountName?: string;
   toAccountName?: string;
   description?: string;
+  isChange?: boolean;
 };
