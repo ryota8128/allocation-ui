@@ -1,4 +1,4 @@
-import { isTokenExpired } from '@/lib/ JwtUtils';
+import { isTokenExpired } from '@/lib/JwtUtils';
 import axios from 'axios';
 import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
@@ -25,5 +25,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: `認証に失敗しました` });
   }
 }
-
-
