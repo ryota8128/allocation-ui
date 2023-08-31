@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
-import { Table, Form } from 'reactstrap';
+import { Table, Form, Button } from 'reactstrap';
 import AccountDropdown from './table/dropdown/AccountDropdown';
 import { Dispatch, SetStateAction, useState } from 'react';
 import axios from 'axios';
 import { CSSProperties } from 'react';
+import { error } from 'console';
 
 interface Props {
   templateList: TemplateTransfer[];
@@ -93,8 +94,32 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
     focusTemplate.isChange = false;
   };
 
+  const onClickDeleteTemplate = (id: number) => {
+    axios
+      .delete('/api/template/delete', {
+        params: {
+          id,
+        },
+      })
+      .then(() => {
+        console.log('Success to delete TemporaryTransfer');
+        window.location.reload();
+      })
+      .catch(() => {
+        console.log('Failed to delete TemporaryTransfer');
+        setErrMsg('Template Transferの削除に失敗しました．');
+      });
+  };
+
   return (
     <div>
+      <style jsx>{`
+        /* 削除ボタンがはみ出すようにする */
+        td:last-child {
+          white-space: nowrap;
+          border: none;
+        }
+      `}</style>
       <Table>
         <thead>
           <tr style={{ whiteSpace: 'nowrap' }}>
@@ -131,6 +156,16 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
                   onChange={(e) => onChangeDescription(e, transfer.id as number)}
                   onBlur={() => onBlurDescription(transfer)}
                 />
+              </td>
+              <td>
+                <Button
+                  outline
+                  className="btn-sm"
+                  color="danger"
+                  onClick={() => onClickDeleteTemplate(transfer.id as number)}
+                >
+                  削除
+                </Button>
               </td>
             </tr>
           ))}
