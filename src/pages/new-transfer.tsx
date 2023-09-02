@@ -11,6 +11,8 @@ import { getAccountList } from '@/lib/accountReq';
 import AccountList from './menu/list';
 import { useRouter } from 'next/router';
 
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
+
 interface Props {
   regularList: RegularTransfer[];
   accountList: Account[];
@@ -28,7 +30,7 @@ const NewTransfer: NextPage<Props> = ({ regularList, accountList }) => {
     // 新規transfer追加処理
     const transfer: Transfer = { title: title };
     try {
-      await axios.post('/api/transfer/insert', transfer);
+      await axios.post(`${ownApiPath}/api/transfer/insert`, transfer);
       console.log('Success to insert Transfer');
     } catch (error) {
       console.log('Failed to insert Transfer');
@@ -38,7 +40,7 @@ const NewTransfer: NextPage<Props> = ({ regularList, accountList }) => {
     // 追加したtransferを取得
     let insertedTransfer: Transfer;
     try {
-      await axios.get(`api/transfer/findOneWithTitle?title=${title}`).then((res) => {
+      await axios.get(`${ownApiPath}api/transfer/findOneWithTitle?title=${title}`).then((res) => {
         insertedTransfer = res.data as Transfer;
         router.push(`/transfer?id=${insertedTransfer.id}`);
       });

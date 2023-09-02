@@ -6,6 +6,8 @@ import { LiaEditSolid } from 'react-icons/lia';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
+
 interface Props {
   title: string;
   transferId: number;
@@ -67,7 +69,7 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
 
   const handleClickDeleteTransfer = async () => {
     try {
-      await axios.delete(`/api/transfer/delete?id=${transferId}`);
+      await axios.delete(`${ownApiPath}/api/transfer/delete?id=${transferId}`);
       console.log('振替ページを1件削除しました');
       router.push('/');
     } catch (error) {
@@ -82,7 +84,7 @@ const TransferTitle: React.FC<Props> = ({ title, transferId, setErrorMsg }) => {
         id: transferId,
         title: editingTitle,
       };
-      await axios.patch(`/api/transfer/update`, newTransfer);
+      await axios.patch(`${ownApiPath}/api/transfer/update`, newTransfer);
       console.log('Transferのタイトルを更新しました');
       setUpdatedTitle(editingTitle);
     } catch (error) {
