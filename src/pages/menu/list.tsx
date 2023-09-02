@@ -5,7 +5,8 @@ import { getAccountList } from '@/lib/accountReq';
 import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { Alert, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -17,8 +18,15 @@ interface Props {
 }
 
 const AccountList: NextPage<Props> = ({ accountList, templateList, regularList }) => {
-  const [tabNo, setTabNo] = useState('1');
+  const router = useRouter();
+  const { tab } = router.query;
+  const [tabNo, setTabNo] = useState((tab as string) || '1');
   const [errMsg, setErrMsg] = useState('');
+
+  useEffect(() => {
+    const newPath = `/menu/list?tab=${tabNo}`;
+    router.replace(newPath);
+  }, [tabNo]);
 
   return (
     <div>

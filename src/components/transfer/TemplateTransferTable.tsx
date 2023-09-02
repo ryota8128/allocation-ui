@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import axios from 'axios';
 import { CSSProperties } from 'react';
 import { error } from 'console';
+import { useRouter } from 'next/router';
 
 interface Props {
   templateList: TemplateTransfer[];
@@ -15,6 +16,8 @@ interface Props {
 const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, setErrMsg }) => {
   const [defaultTemplateList, setDefaultTemplateList] = useState<TemplateTransfer[]>(templateList);
   const [updatedTemplateList, setUpdatedTemplateList] = useState<TemplateTransfer[]>(templateList);
+  const [newTemplateList, setNewTemplateList] = useState<TemplateTransfer[]>([]);
+  const [newTemplateKey, setNewTemplateKey] = useState(0);
 
   const inputStyle: CSSProperties = {
     border: 'none',
@@ -31,7 +34,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
     }
   };
 
-  // dropdown内での変更を検知してupdateする
+  // 既存Templateにおいてdropdown内での変更を検知してupdateする
   const onClickDropdown = (
     id: number,
     newAccountId: number,
@@ -54,6 +57,27 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
     if (changedTemplate) {
       updateTemplate(changedTemplate);
     }
+  };
+
+  const onClickDropdownForNewTemplate = (
+    id: number,
+    newAccountId: number,
+    newAccountName: string,
+    column: 'fromAccount' | 'toAccount'
+  ) => {
+    let changedTemplate: TemplateTransfer | undefined = undefined;
+    setNewTemplateList(
+      newTemplateList.map((transfer) => {
+        if (transfer.id !== id) return transfer;
+
+        changedTemplate = {
+          ...transfer,
+          [column]: newAccountId,
+          [`${column}Name`]: newAccountName,
+        };
+        return changedTemplate;
+      })
+    );
   };
 
   const onChangeDescription = (e: React.ChangeEvent<HTMLInputElement>, changeId: number) => {
@@ -103,11 +127,49 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
       })
       .then(() => {
         console.log('Success to delete TemporaryTransfer');
-        window.location.reload();
+        setUpdatedTemplateList(updatedTemplateList.filter((t) => t.id !== id));
+        setDefaultTemplateList(defaultTemplateList.filter((t) => t.id !== id));
       })
       .catch(() => {
         console.log('Failed to delete TemporaryTransfer');
         setErrMsg('Template Transferの削除に失敗しました．');
+      });
+  };
+
+  const onChangeNewDescription = (e: React.ChangeEvent<HTMLInputElement>, changeKey: number) => {
+    setNewTemplateList(
+      newTemplateList.map((t) => {
+        if (t.key === changeKey) return { ...t, description: e.target.value };
+        return t;
+      })
+    );
+  };
+
+  const onClickAddNewTemplate = () => {
+    setNewTemplateList([...newTemplateList, { key: newTemplateKey }]);
+    setNewTemplateKey((pre) => pre + 1);
+    console.log(newTemplateList);
+  };
+
+  const onClickInsert = (template: TemplateTransfer) => {
+    const newTemplate: TemplateTransfer = {
+      fromAccount: template.fromAccount,
+      toAccount: template.toAccount,
+      description: template.description,
+    };
+
+    axios
+      .post('/api/template/insert', newTemplate)
+      .then((res) => {
+        console.log(res);
+        console.log('Template Transferの追加に成功しました．');
+        const insertedTemplate: TemplateTransfer = res.data as TemplateTransfer;
+        setUpdatedTemplateList([...updatedTemplateList, insertedTemplate]);
+        setNewTemplateList(newTemplateList.filter((t) => t.key !== template.key));
+      })
+      .catch((err) => {
+        console.warn(err.response);
+        setErrMsg(err.response.data);
       });
   };
 
@@ -169,8 +231,52 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
               </td>
             </tr>
           ))}
+          {/* 新規追加前のTemplateTransfer */}
+          {newTemplateList.map((transfer) => (
+            <tr key={transfer.key}>
+              <td>
+                <AccountDropdown
+                  accountList={accountList}
+                  transfer={transfer}
+                  column="fromAccount"
+                  onClickDropdown={onClickDropdownForNewTemplate}
+                />
+              </td>
+              <td>
+                <AccountDropdown
+                  accountList={accountList}
+                  transfer={transfer}
+                  column="toAccount"
+                  onClickDropdown={onClickDropdownForNewTemplate}
+                />
+              </td>
+              <td style={{ textAlign: 'center' }}>
+                <input
+                  type="text"
+                  style={{ ...inputStyle, width: 150, textAlign: 'right' }}
+                  name="description"
+                  value={transfer.description ?? ''}
+                  onChange={(e) => onChangeNewDescription(e, transfer.key as number)}
+                  onBlur={() => onBlurDescription(transfer)}
+                />
+              </td>
+              <td>
+                <Button
+                  outline
+                  className="btn-sm"
+                  color="primary"
+                  onClick={() => onClickInsert(transfer)}
+                >
+                  追加
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
+      <Button className="btn-sm" onClick={onClickAddNewTemplate}>
+        新規追加
+      </Button>
 
       <p></p>
     </div>
