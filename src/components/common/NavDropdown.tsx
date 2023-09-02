@@ -1,8 +1,6 @@
 import { NextPage } from 'next';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, NavItem, NavLink } from 'reactstrap';
 import { CSSProperties, useState } from 'react';
-import Link from 'next/link';
-import { LinkButton } from './LinkButton';
 import { useRouter } from 'next/router';
 
 interface Props {
@@ -41,7 +39,7 @@ const NavDropdown: NextPage<Props> = ({ username }) => {
           </DropdownItem>
           <DropdownItem
             style={{ textAlign: 'center' }}
-            onClick={() => onClickDropdownItem('/account/list')}
+            onClick={() => onClickDropdownItem('/menu/list')}
           >
             口座情報
           </DropdownItem>
