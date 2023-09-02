@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
 
 export const findTemporary = async (token: string, transferId: number) => {
   try {
@@ -32,7 +33,7 @@ export const findTemporary = async (token: string, transferId: number) => {
 
 export const findTemporaryWithApi = async (id: number) => {
   try {
-    const res = await axios.get(`/api/temporary/find?transferId=${id}`);
+    const res = await axios.get(`${ownApiPath}/api/temporary/find?transferId=${id}`);
     return res.data as TemporaryTransfer[];
   } catch (error) {
     throw new Error('非定期振替の取得に失敗しました');
@@ -41,7 +42,7 @@ export const findTemporaryWithApi = async (id: number) => {
 
 export const updateTemporary = async (temporary: TemporaryTransfer) => {
   try {
-    await axios.patch('/api/temporary/update', temporary);
+    await axios.patch(`${ownApiPath}/api/temporary/update`, temporary);
     console.log('Success to update TemporaryTransfer');
   } catch {
     console.error('Failed to update TemporaryTransfer');
@@ -55,7 +56,7 @@ export const insertTemporary = async (transferId: number) => {
     amount: 0,
   };
   try {
-    await axios.post('api/temporary/insert', newTemporary);
+    await axios.post(`${ownApiPath}/api/temporary/insert`, newTemporary);
     console.log('Success to insert TemporaryTransfer');
   } catch (error) {
     console.log('Failed to update TemporaryTransfer');
@@ -65,7 +66,7 @@ export const insertTemporary = async (transferId: number) => {
 
 export const deleteTemporary = async (id: number) => {
   try {
-    await axios.delete('api/temporary/delete', {
+    await axios.delete(`${ownApiPath}/api/temporary/delete`, {
       params: {
         id,
       },

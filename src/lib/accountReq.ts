@@ -1,5 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
+
 export const getAccountList = async (token: string) => {
   const res = await axios.get(`${apiUrl}/api/account/list`, {
     headers: {
@@ -23,7 +25,7 @@ export const addAccount = async (account: Account, token: string) => {
 export const addAccountWithNameApi = async (accountName: string) => {
   const account: Account = { name: accountName };
   try {
-    await axios.post('/api/account/insert', account);
+    await axios.post(`${ownApiPath}/api/account/insert`, account);
     console.log('Success to insert Account');
   } catch (error) {
     console.log('Failed to insert Account');
@@ -32,7 +34,7 @@ export const addAccountWithNameApi = async (accountName: string) => {
 
 export const addAccountWithApi = async (account: Account) => {
   try {
-    await axios.post('/api/account/insert', account);
+    await axios.post(`${ownApiPath}/api/account/insert`, account);
     console.log('Success to insert Account');
   } catch (error) {
     console.log('Failed to insert Account');
@@ -41,7 +43,7 @@ export const addAccountWithApi = async (account: Account) => {
 
 export const findOneAccountWithApi = async (name: string) => {
   try {
-    const res = await axios.get('/api/account/findOneWithName', {
+    const res = await axios.get(`${ownApiPath}/api/account/findOneWithName`, {
       params: {
         name,
       },
@@ -55,7 +57,7 @@ export const findOneAccountWithApi = async (name: string) => {
 
 export const updateAccountWithApi = async (account: Account) => {
   try {
-    const res = await axios.patch('/api/account/update', account);
+    const res = await axios.patch(`${ownApiPath}/api/account/update`, account);
     console.log('Success to update Account');
   } catch (error) {
     console.log('Failed to update Account');
@@ -64,7 +66,7 @@ export const updateAccountWithApi = async (account: Account) => {
 
 export const deleteAccountWithApi = async (id: number) => {
   try {
-    const res = await axios.delete('/api/account/delete', {
+    const res = await axios.delete(`${ownApiPath}/api/account/delete`, {
       params: {
         id,
       },

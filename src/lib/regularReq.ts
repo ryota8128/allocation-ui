@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
 
 export const findRegular = async (token: string) => {
   try {
@@ -28,7 +29,7 @@ export const findRegular = async (token: string) => {
 
 export const findRegularWithApi = async () => {
   try {
-    const res = await axios.get('/api/regular/find');
+    const res = await axios.get(`${ownApiPath}/api/regular/find`);
     return res.data as RegularTransfer[];
   } catch (error) {
     throw new Error('定期振替の取得に失敗しました');
@@ -37,7 +38,7 @@ export const findRegularWithApi = async () => {
 
 export const updateRegular = async (regular: RegularTransfer) => {
   try {
-    await axios.patch('/api/regular/update', regular);
+    await axios.patch(`${ownApiPath}/api/regular/update`, regular);
     console.log('Success to update RegularTransfer');
   } catch (error) {
     console.log('Failed to update RegularTransfer');
@@ -52,7 +53,7 @@ export const insertRegular = async () => {
     percentage: false,
   };
   try {
-    await axios.post('api/regular/insert', newRegular);
+    await axios.post(`${ownApiPath}/api/regular/insert`, newRegular);
     console.log('Success to insert RegularTransfer');
   } catch (error) {
     console.log('Failed to update RegularTransfer');
@@ -62,7 +63,7 @@ export const insertRegular = async () => {
 
 export const deleteRegular = async (id: number) => {
   try {
-    await axios.delete('api/regular/delete', {
+    await axios.delete(`${ownApiPath}/api/regular/delete`, {
       params: {
         id,
       },

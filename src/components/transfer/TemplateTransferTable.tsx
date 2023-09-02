@@ -7,6 +7,8 @@ import { CSSProperties } from 'react';
 import { error } from 'console';
 import { useRouter } from 'next/router';
 
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
+
 interface Props {
   templateList: TemplateTransfer[];
   accountList: Account[];
@@ -26,7 +28,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
 
   const updateTemplate = async (template: TemplateTransfer) => {
     try {
-      await axios.patch('/api/template/update', template);
+      await axios.patch(`${ownApiPath}/api/template/update`, template);
       console.log('Success to update TemplateTransfer');
     } catch (error) {
       console.log('Failed to update TemplateTransfer');
@@ -106,7 +108,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
     if (!focusTemplate.isChange) return;
 
     try {
-      await axios.patch('/api/template/update', focusTemplate);
+      await axios.patch(`${ownApiPath}/api/template/update`, focusTemplate);
       console.log('Success to update Template Transfer');
     } catch (error) {
       console.warn('Failed to update Template Transfer');
@@ -120,7 +122,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
 
   const onClickDeleteTemplate = (id: number) => {
     axios
-      .delete('/api/template/delete', {
+      .delete(`${ownApiPath}/api/template/delete`, {
         params: {
           id,
         },
@@ -159,7 +161,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
     };
 
     axios
-      .post('/api/template/insert', newTemplate)
+      .post(`${ownApiPath}/api/template/insert`, newTemplate)
       .then((res) => {
         console.log(res);
         console.log('Template Transferの追加に成功しました．');

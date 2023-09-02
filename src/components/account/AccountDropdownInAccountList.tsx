@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem, Button, Input, DropdownToggle } from 'reactstrap';
 import axios from 'axios';
 
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
+
 interface Props {
   accountList: Account[];
   account: Account;
@@ -19,7 +21,7 @@ const AccountDropdownInAccountList: NextPage<Props> = ({ accountList, account })
     const newVia: number | undefined = selectedViaId === -1 ? undefined : selectedViaId;
     const newAccount: Account = { ...account, via: newVia };
     try {
-      const res = await axios.patch('/api/account/update', newAccount);
+      const res = await axios.patch(`${ownApiPath}/api/account/update`, newAccount);
       setPreviewName(accountList.find((ac) => ac.id === selectedViaId)?.name ?? '---');
       console.log(res.data);
     } catch (error) {

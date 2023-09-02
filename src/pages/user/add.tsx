@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 
+const ownApiPath = process.env.OWN_NEXT_PUBLIC_OWN_API_PATHAPI_PATH;
+
 interface Props {}
 
 const UserAddPage: NextPage<Props> = () => {
@@ -40,7 +42,7 @@ const UserAddPage: NextPage<Props> = () => {
     e.preventDefault();
     console.log('user add start');
     try {
-      await axios.post('/api/user/insert', user);
+      await axios.post(`${ownApiPath}/api/user/insert`, user);
       signIn('credentials', {
         username: user.username,
         password: user.password,
