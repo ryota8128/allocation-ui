@@ -1,4 +1,4 @@
-import { isTokenExpired } from '@/lib/ JwtUtils';
+import { isTokenExpired } from '@/lib/JwtUtils';
 import axios from 'axios';
 import { error } from 'console';
 import { NextApiRequest, NextApiResponse } from 'next';

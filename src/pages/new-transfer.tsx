@@ -8,7 +8,7 @@ import { getSession } from 'next-auth/react';
 import { findRegular } from '@/lib/regularReq';
 import RegularTransferTable from '@/components/transfer/RegularTransferTable';
 import { getAccountList } from '@/lib/accountReq';
-import AccountList from './account/list';
+import AccountList from './menu/list';
 import { useRouter } from 'next/router';
 
 interface Props {

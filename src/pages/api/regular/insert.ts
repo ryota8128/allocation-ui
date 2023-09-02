@@ -1,14 +1,11 @@
-import { isTokenExpired } from '@/lib/ JwtUtils';
+import { isTokenExpired } from '@/lib/JwtUtils';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const user = await getToken({ req });
   const token = user?.accessToken;
 
