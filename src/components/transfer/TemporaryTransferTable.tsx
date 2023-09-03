@@ -101,8 +101,8 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
           border: none;
         }
       `}</style>
-      <div style={{ overflowX: 'auto' }}>
-        <Table style={{ width: '730px' }}>
+      <div>
+        <Table style={{ width: '730px', zIndex: 1, position: 'relative' }}>
           <thead>
             <tr>
               <th style={{ textAlign: 'center' }}>from</th>
