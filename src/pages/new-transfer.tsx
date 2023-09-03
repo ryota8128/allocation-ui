@@ -40,7 +40,7 @@ const NewTransfer: NextPage<Props> = ({ regularList, accountList }) => {
     // 追加したtransferを取得
     let insertedTransfer: Transfer;
     try {
-      await axios.get(`${ownApiPath}api/transfer/findOneWithTitle?title=${title}`).then((res) => {
+      await axios.get(`${ownApiPath}/api/transfer/findOneWithTitle?title=${title}`).then((res) => {
         insertedTransfer = res.data as Transfer;
         router.push(`/transfer?id=${insertedTransfer.id}`);
       });
