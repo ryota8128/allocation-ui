@@ -40,12 +40,12 @@ const AccountDropdown: NextPage<Props> = ({ accountList, transfer, column, onCli
   };
 
   return (
-    <div className="d-flex" style={{ position: 'absolute' }}>
+    <div className="d-flex">
       <Dropdown isOpen={dropdownOpen} toggle={toggle} direction="down">
         <DropdownToggle tag="span" style={{ cursor: 'pointer' }}>
           {title}
         </DropdownToggle>
-        <DropdownMenu style={{ zIndex: 9999 }}>
+        <DropdownMenu style={{ zIndex: 9999, position: 'absolute' }}>
           <DropdownItem header style={{ textAlign: 'center' }}>
             口座選択
           </DropdownItem>
