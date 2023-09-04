@@ -138,17 +138,17 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
       });
   };
 
-  const onChangeNewDescription = (e: React.ChangeEvent<HTMLInputElement>, changeKey: number) => {
+  const onChangeNewDescription = (e: React.ChangeEvent<HTMLInputElement>, changeId: number) => {
     setNewTemplateList(
       newTemplateList.map((t) => {
-        if (t.key === changeKey) return { ...t, description: e.target.value };
+        if (t.id === changeId) return { ...t, description: e.target.value };
         return t;
       })
     );
   };
 
   const onClickAddNewTemplate = () => {
-    setNewTemplateList([...newTemplateList, { key: newTemplateKey }]);
+    setNewTemplateList([...newTemplateList, { id: newTemplateKey }]);
     setNewTemplateKey((pre) => pre + 1);
     console.log(newTemplateList);
   };
@@ -167,7 +167,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
         console.log('Template Transferの追加に成功しました．');
         const insertedTemplate: TemplateTransfer = res.data as TemplateTransfer;
         setUpdatedTemplateList([...updatedTemplateList, insertedTemplate]);
-        setNewTemplateList(newTemplateList.filter((t) => t.key !== template.key));
+        setNewTemplateList(newTemplateList.filter((t) => t.id !== template.id));
       })
       .catch((err) => {
         console.warn(err.response);
@@ -235,7 +235,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
           ))}
           {/* 新規追加前のTemplateTransfer */}
           {newTemplateList.map((transfer) => (
-            <tr key={transfer.key}>
+            <tr key={transfer.id}>
               <td>
                 <AccountDropdown
                   accountList={accountList}
@@ -258,7 +258,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
                   style={{ ...inputStyle, width: 150, textAlign: 'right' }}
                   name="description"
                   value={transfer.description ?? ''}
-                  onChange={(e) => onChangeNewDescription(e, transfer.key as number)}
+                  onChange={(e) => onChangeNewDescription(e, transfer.id as number)}
                   onBlur={() => onBlurDescription(transfer)}
                 />
               </td>
