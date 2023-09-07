@@ -192,11 +192,6 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
     );
   };
 
-  // todo:削除
-  useEffect(() => {
-    console.log(newRegularList);
-  }, [newRegularList]);
-
   const onClickInsert = (regular: RegularTransfer) => {
     const newRegular: RegularTransfer = {
       fromAccount: regular.fromAccount,
