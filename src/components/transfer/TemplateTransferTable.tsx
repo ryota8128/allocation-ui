@@ -20,6 +20,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
   const [updatedTemplateList, setUpdatedTemplateList] = useState<TemplateTransfer[]>(templateList);
   const [newTemplateList, setNewTemplateList] = useState<TemplateTransfer[]>([]);
   const [newTemplateKey, setNewTemplateKey] = useState(0);
+  const [displayAccountList, setDisplayAccountList] = useState<Account[]>(accountList);
 
   const inputStyle: CSSProperties = {
     border: 'none',
@@ -90,9 +91,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
         }
 
         //　更新前と比較して変わってたらisChanged -> true
-        const defaultTemplate = defaultTemplateList.find(
-          (t) => t.id === changeId
-        ) as TemplateTransfer;
+        const defaultTemplate = defaultTemplateList.find((t) => t.id === changeId) as TemplateTransfer;
         const isChange = e.target.value != defaultTemplate.description;
 
         return {
@@ -197,18 +196,20 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
             <tr key={transfer.id}>
               <td>
                 <AccountDropdown
-                  accountList={accountList}
+                  accountList={displayAccountList}
                   transfer={transfer}
                   column="fromAccount"
                   onClickDropdown={onClickDropdown}
+                  setDisplayAccountList={setDisplayAccountList}
                 />
               </td>
               <td>
                 <AccountDropdown
-                  accountList={accountList}
+                  accountList={displayAccountList}
                   transfer={transfer}
                   column="toAccount"
                   onClickDropdown={onClickDropdown}
+                  setDisplayAccountList={setDisplayAccountList}
                 />
               </td>
               <td style={{ textAlign: 'center' }}>
@@ -238,18 +239,20 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
             <tr key={transfer.id}>
               <td>
                 <AccountDropdown
-                  accountList={accountList}
+                  accountList={displayAccountList}
                   transfer={transfer}
                   column="fromAccount"
                   onClickDropdown={onClickDropdownForNewTemplate}
+                  setDisplayAccountList={setDisplayAccountList}
                 />
               </td>
               <td>
                 <AccountDropdown
-                  accountList={accountList}
+                  accountList={displayAccountList}
                   transfer={transfer}
                   column="toAccount"
                   onClickDropdown={onClickDropdownForNewTemplate}
+                  setDisplayAccountList={setDisplayAccountList}
                 />
               </td>
               <td style={{ textAlign: 'center' }}>
@@ -263,12 +266,7 @@ const TemplateTransferTable: NextPage<Props> = ({ templateList, accountList, set
                 />
               </td>
               <td>
-                <Button
-                  outline
-                  className="btn-sm"
-                  color="primary"
-                  onClick={() => onClickInsert(transfer)}
-                >
+                <Button outline className="btn-sm" color="primary" onClick={() => onClickInsert(transfer)}>
                   追加
                 </Button>
               </td>

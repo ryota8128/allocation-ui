@@ -17,6 +17,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
   const [updatedRegularList, setUpdatedRegularList] = useState<RegularTransfer[]>(regularList);
   const [newRegularList, setNewRegularList] = useState<RegularTransfer[]>([]);
   const [newRegularKey, setNewRegularKey] = useState(-1);
+  const [displayAccountList, setDisplayAccountList] = useState<Account[]>(accountList);
 
   const inputStyle: CSSProperties = {
     border: 'none',
@@ -27,10 +28,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
     const property = e.target.name as keyof RegularTransfer;
 
     // バリデーション
-    if (
-      property === 'ratio' &&
-      (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))
-    ) {
+    if (property === 'ratio' && (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))) {
       return;
     }
 
@@ -137,7 +135,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
     setNewRegularKey((pre) => pre - 1);
   };
 
-  const onClickDropdownForNewTemplate = (
+  const onClickDropdownForNewRegular = (
     id: number,
     newAccountId: number,
     newAccountName: string,
@@ -162,10 +160,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
     const property = e.target.name as keyof RegularTransfer;
 
     // バリデーション
-    if (
-      property === 'ratio' &&
-      (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))
-    ) {
+    if (property === 'ratio' && (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))) {
       return;
     }
 
@@ -209,6 +204,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
       description: regular.description,
       percentage: regular.percentage,
       ratio: regular.ratio,
+      amount: regular.amount,
     };
 
     axios
@@ -216,8 +212,8 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
       .then((res) => {
         console.log(res);
         console.log('Regular Transferの追加に成功しました．');
-        const insertedTemplate: TemplateTransfer = res.data as TemplateTransfer;
-        setUpdatedRegularList([...updatedRegularList, insertedTemplate]);
+        const insertedRegular: RegularTransfer = res.data as RegularTransfer;
+        setUpdatedRegularList([...updatedRegularList, insertedRegular]);
         setNewRegularList(newRegularList.filter((r) => r.id !== regular.id));
       })
       .catch((err) => {
@@ -236,7 +232,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
         }
       `}</style>
       <div>
-        <Table style={{ marginBottom: 0, width: '700px' }}>
+        <Table style={{ marginBottom: 0 }}>
           <thead>
             <tr>
               <th style={{ textAlign: 'center' }}>from</th>
@@ -252,18 +248,20 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
               <tr key={regular.id}>
                 <td>
                   <AccountDropdown
-                    accountList={accountList}
+                    accountList={displayAccountList}
                     transfer={regular}
                     column="fromAccount"
                     onClickDropdown={onClickDropdown}
+                    setDisplayAccountList={setDisplayAccountList}
                   />
                 </td>
                 <td>
                   <AccountDropdown
-                    accountList={accountList}
+                    accountList={displayAccountList}
                     transfer={regular}
                     column="toAccount"
                     onClickDropdown={onClickDropdown}
+                    setDisplayAccountList={setDisplayAccountList}
                   />
                 </td>
                 <td>
@@ -347,18 +345,20 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
               <tr key={r.id}>
                 <td>
                   <AccountDropdown
-                    accountList={accountList}
+                    accountList={displayAccountList}
                     transfer={r}
                     column="fromAccount"
-                    onClickDropdown={onClickDropdownForNewTemplate}
+                    onClickDropdown={onClickDropdownForNewRegular}
+                    setDisplayAccountList={setDisplayAccountList}
                   />
                 </td>
                 <td>
                   <AccountDropdown
-                    accountList={accountList}
+                    accountList={displayAccountList}
                     transfer={r}
                     column="toAccount"
-                    onClickDropdown={onClickDropdownForNewTemplate}
+                    onClickDropdown={onClickDropdownForNewRegular}
+                    setDisplayAccountList={setDisplayAccountList}
                   />
                 </td>
                 <td>
@@ -413,12 +413,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
                   />
                 </td>
                 <td>
-                  <Button
-                    outline
-                    className="btn-sm"
-                    color="primary"
-                    onClick={() => onClickInsert(r)}
-                  >
+                  <Button outline className="btn-sm" color="primary" onClick={() => onClickInsert(r)}>
                     追加
                   </Button>
                 </td>
