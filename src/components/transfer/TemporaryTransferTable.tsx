@@ -85,8 +85,21 @@ const TemporaryTransferTable: NextPage<Props> = ({ temporaryList, accountList, t
 
   // Temporary削除処理
   const onClickDeleteButton = (id: number) => {
-    deleteTemporary(id);
-    window.location.reload();
+    axios
+      .delete(`${ownApiPath}/api/temporary/delete`, {
+        params: {
+          id,
+        },
+      })
+      .then(() => {
+        console.log('Success to delete TemporaryTransfer');
+        setUpdatedTemporaryList(updatedTemporaryList.filter((t) => t.id !== id));
+        setDefaultTemporaryList(defaultTemporaryList.filter((t) => t.id !== id));
+      })
+      .catch(() => {
+        console.log('Failed to delete TemporaryTransfer');
+        // setErrMsg('Temporary Transferの削除に失敗しました．');
+      });
   };
 
   // 新規追加処理
