@@ -5,10 +5,11 @@ type RegularTransfer = {
   fromAccountName?: string;
   toAccountName?: string;
   description?: string;
-  percentage: boolean;
+  percentage?: boolean;
   amount?: number;
   ratio?: number;
   userId?: number;
   type?: 'regular';
   isChanged?: boolean;
+  key?: number;
 };

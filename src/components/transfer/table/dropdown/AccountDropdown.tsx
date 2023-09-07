@@ -1,6 +1,6 @@
 import { addAccountWithNameApi, findOneAccountWithApi } from '@/lib/accountReq';
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap';
 import { PiDotsThreeOutlineLight } from 'react-icons/pi';
 
@@ -14,35 +14,41 @@ interface Props {
     newAccountName: string,
     column: 'fromAccount' | 'toAccount'
   ) => void;
+  setDisplayAccountList: Dispatch<SetStateAction<Account[]>>;
 }
 
-const AccountDropdown: NextPage<Props> = ({ accountList, transfer, column, onClickDropdown }) => {
+const AccountDropdown: NextPage<Props> = ({
+  accountList,
+  transfer,
+  column,
+  onClickDropdown,
+  setDisplayAccountList,
+}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const [newAccountName, setNewAccountName] = useState('');
   const [isHoverState, setIsHoverState] = useState<{ [key: number]: boolean }>({});
-  const title =
-    column === 'fromAccount' ? transfer.fromAccountName ?? '---' : transfer.toAccountName ?? '---';
+  const title = column === 'fromAccount' ? transfer.fromAccountName ?? '---' : transfer.toAccountName ?? '---';
 
   const onClickAddAccount = async () => {
-    await addAccountWithNameApi(newAccountName);
+    try {
+      await addAccountWithNameApi(newAccountName);
+    } catch (error) {
+      return;
+    }
     setNewAccountName('');
     //findOneさっき追加したAccount
-    const newAccount = await findOneAccountWithApi(newAccountName);
+    const newAccount = (await findOneAccountWithApi(newAccountName)) as Account;
     // findOneしたのをセット
-    onClickDropdown(
-      transfer.id as number,
-      newAccount?.id as number,
-      newAccount?.name as string,
-      column
-    );
-    window.location.reload();
+    onClickDropdown(transfer.id as number, newAccount?.id as number, newAccount?.name as string, column);
+    toggle();
+    setDisplayAccountList([...accountList, newAccount]);
   };
 
   return (
     <div className="d-flex">
       <Dropdown isOpen={dropdownOpen} toggle={toggle} direction="down">
-        <DropdownToggle tag="span" style={{ cursor: 'pointer' }}>
+        <DropdownToggle tag="span" style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}>
           {title}
         </DropdownToggle>
         <DropdownMenu style={{ zIndex: 9999, position: 'absolute' }}>
@@ -58,14 +64,7 @@ const AccountDropdown: NextPage<Props> = ({ accountList, transfer, column, onCli
                     textAlign: 'center',
                     cursor: 'default',
                   }}
-                  onClick={() =>
-                    onClickDropdown(
-                      transfer.id as number,
-                      account.id as number,
-                      account.name,
-                      column
-                    )
-                  }
+                  onClick={() => onClickDropdown(transfer.id as number, account.id as number, account.name, column)}
                 >
                   {account.name}
                 </DropdownItem>

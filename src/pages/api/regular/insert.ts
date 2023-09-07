@@ -23,6 +23,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     return res.status(apiRes.status).json(apiRes.data);
   } catch (error) {
-    return res.status(401).json({ error: '認証に失敗しました' });
+    if (axios.isAxiosError(error)) {
+      // APIからのエラーレスポンスが存在する場合
+      if (error.response) {
+        return res.status(error.response.status).json(error.response.data);
+      }
+    }
+
+    // それ以外のエラー（ネットワークエラー、タイムアウトなど）
+    return res.status(500).json({ error: 'サーバーエラーが発生しました。' });
   }
 }
