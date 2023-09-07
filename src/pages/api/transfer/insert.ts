@@ -1,6 +1,6 @@
 import { isTokenExpired } from '@/lib/JwtUtils';
 import axios from 'axios';
-import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;

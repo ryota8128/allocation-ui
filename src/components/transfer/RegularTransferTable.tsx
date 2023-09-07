@@ -1,8 +1,11 @@
 import { NextPage } from 'next';
 import { Button, Table } from 'reactstrap';
 import AccountDropdown from './table/dropdown/AccountDropdown';
-import { CSSProperties, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { deleteRegular, insertRegular, updateRegular } from '@/lib/regularReq';
+import axios from 'axios';
+
+const ownApiPath = process.env.NEXT_PUBLIC_OWN_API_PATH;
 
 interface Props {
   regularList: RegularTransfer[];
@@ -12,6 +15,9 @@ interface Props {
 const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => {
   const [defaultRegularList, setDefaultRegularList] = useState<RegularTransfer[]>(regularList);
   const [updatedRegularList, setUpdatedRegularList] = useState<RegularTransfer[]>(regularList);
+  const [newRegularList, setNewRegularList] = useState<RegularTransfer[]>([]);
+  const [newRegularKey, setNewRegularKey] = useState(-1);
+  const [displayAccountList, setDisplayAccountList] = useState<Account[]>(accountList);
 
   const inputStyle: CSSProperties = {
     border: 'none',
@@ -22,10 +28,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
     const property = e.target.name as keyof RegularTransfer;
 
     // バリデーション
-    if (
-      property === 'ratio' &&
-      (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))
-    ) {
+    if (property === 'ratio' && (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))) {
       return;
     }
 
@@ -107,16 +110,116 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
     }
   };
 
-  // 新規追加処理
-  const onClickInsert = () => {
-    insertRegular();
-    window.location.reload();
-  };
-
   // Regular削除処理
   const onClickDeleteButton = (id: number) => {
-    deleteRegular(id);
-    window.location.reload();
+    axios
+      .delete(`${ownApiPath}/api/regular/delete`, {
+        params: {
+          id,
+        },
+      })
+      .then(() => {
+        console.log('Success to delete TemporaryTransfer');
+        setUpdatedRegularList(updatedRegularList.filter((t) => t.id !== id));
+        setDefaultRegularList(defaultRegularList.filter((t) => t.id !== id));
+      })
+      .catch(() => {
+        console.log('Failed to delete TemporaryTransfer');
+        // setErrMsg('Regular Transferの削除に失敗しました．');
+      });
+  };
+
+  // 新規追加処理
+  const onClickCreateRegular = () => {
+    setNewRegularList([...newRegularList, { id: newRegularKey, percentage: false, amount: 0 }]);
+    setNewRegularKey((pre) => pre - 1);
+  };
+
+  const onClickDropdownForNewRegular = (
+    id: number,
+    newAccountId: number,
+    newAccountName: string,
+    column: 'fromAccount' | 'toAccount'
+  ) => {
+    let changedRegular: RegularTransfer | undefined = undefined;
+    setNewRegularList(
+      newRegularList.map((regular) => {
+        if (regular.id !== id) return regular;
+
+        changedRegular = {
+          ...regular,
+          [column]: newAccountId,
+          [`${column}Name`]: newAccountName,
+        };
+        return changedRegular;
+      })
+    );
+  };
+
+  const onChangeNewRegular = (e: React.ChangeEvent<HTMLInputElement>, changeId: number) => {
+    const property = e.target.name as keyof RegularTransfer;
+
+    // バリデーション
+    if (property === 'ratio' && (parseFloat(e.target.value) < 0 || 1 < parseFloat(e.target.value))) {
+      return;
+    }
+
+    // 表示してるregularListを更新 and 変更のあるregularをisChange:true
+    setNewRegularList(
+      newRegularList.map((regular) => {
+        if (regular.id !== changeId) {
+          return regular;
+        }
+
+        // 変更後の値をセット
+        return {
+          ...regular,
+          [property]: e.target.value,
+        };
+      })
+    );
+  };
+
+  const onChangeNewRegularCheckbox = (e: React.ChangeEvent<HTMLInputElement>, changeId: number) => {
+    // 値の更新
+    setNewRegularList(
+      newRegularList.map((reg) => {
+        if (reg.id === changeId) {
+          return { ...reg, percentage: e.target.checked };
+        }
+        return reg;
+      })
+    );
+  };
+
+  // todo:削除
+  useEffect(() => {
+    console.log(newRegularList);
+  }, [newRegularList]);
+
+  const onClickInsert = (regular: RegularTransfer) => {
+    const newRegular: RegularTransfer = {
+      fromAccount: regular.fromAccount,
+      toAccount: regular.toAccount,
+      description: regular.description,
+      percentage: regular.percentage,
+      ratio: regular.ratio,
+      amount: regular.amount,
+    };
+
+    axios
+      .post(`${ownApiPath}/api/regular/insert`, newRegular)
+      .then((res) => {
+        console.log(res);
+        console.log('Regular Transferの追加に成功しました．');
+        const insertedRegular: RegularTransfer = res.data as RegularTransfer;
+        setUpdatedRegularList([...updatedRegularList, insertedRegular]);
+        setNewRegularList(newRegularList.filter((r) => r.id !== regular.id));
+      })
+      .catch((err) => {
+        console.warn(err.response);
+        // setErrMsg(err.response.data);
+      });
   };
 
   return (
@@ -129,7 +232,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
         }
       `}</style>
       <div>
-        <Table style={{ marginBottom: 0, width: '700px' }}>
+        <Table style={{ marginBottom: 0 }}>
           <thead>
             <tr>
               <th style={{ textAlign: 'center' }}>from</th>
@@ -145,18 +248,20 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
               <tr key={regular.id}>
                 <td>
                   <AccountDropdown
-                    accountList={accountList}
+                    accountList={displayAccountList}
                     transfer={regular}
                     column="fromAccount"
                     onClickDropdown={onClickDropdown}
+                    setDisplayAccountList={setDisplayAccountList}
                   />
                 </td>
                 <td>
                   <AccountDropdown
-                    accountList={accountList}
+                    accountList={displayAccountList}
                     transfer={regular}
                     column="toAccount"
                     onClickDropdown={onClickDropdown}
+                    setDisplayAccountList={setDisplayAccountList}
                   />
                 </td>
                 <td>
@@ -186,7 +291,16 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
                     />
                   </td>
                 ) : (
-                  <td>---</td>
+                  <td style={{ textAlign: 'right' }}>
+                    <span
+                      style={{
+                        width: 100,
+                        fontFamily: 'Lining',
+                      }}
+                    >
+                      ---
+                    </span>
+                  </td>
                 )}
 
                 {regular.percentage == true ? (
@@ -210,6 +324,7 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
                     checked={regular.percentage}
                     onChange={(e) => onChangeCheckbox(e, regular.id as number)}
                     name="percentage"
+                    disabled
                   />
                 </td>
                 <td>
@@ -224,10 +339,90 @@ const RegularTransferTable: NextPage<Props> = ({ regularList, accountList }) => 
                 </td>
               </tr>
             ))}
+
+            {/* 新規追加前のRegularTransferリスト */}
+            {newRegularList.map((r) => (
+              <tr key={r.id}>
+                <td>
+                  <AccountDropdown
+                    accountList={displayAccountList}
+                    transfer={r}
+                    column="fromAccount"
+                    onClickDropdown={onClickDropdownForNewRegular}
+                    setDisplayAccountList={setDisplayAccountList}
+                  />
+                </td>
+                <td>
+                  <AccountDropdown
+                    accountList={displayAccountList}
+                    transfer={r}
+                    column="toAccount"
+                    onClickDropdown={onClickDropdownForNewRegular}
+                    setDisplayAccountList={setDisplayAccountList}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    style={{ ...inputStyle, width: 150, textAlign: 'right' }}
+                    name="description"
+                    value={r.description ?? ''}
+                    onChange={(e) => onChangeNewRegular(e, r.id as number)}
+                  />
+                </td>
+                {r.percentage == false ? (
+                  <td>
+                    <input
+                      type="number"
+                      style={{
+                        ...inputStyle,
+                        width: 100,
+                        textAlign: 'right',
+                        fontFamily: 'Lining',
+                      }}
+                      name="amount"
+                      value={r.amount}
+                      onChange={(e) => onChangeNewRegular(e, r.id as number)}
+                    />
+                  </td>
+                ) : (
+                  <td style={{ textAlign: 'right' }}>---</td>
+                )}
+
+                {r.percentage == true ? (
+                  <td>
+                    <input
+                      type="number"
+                      style={{ ...inputStyle, width: 100 }}
+                      name="ratio"
+                      value={r.ratio}
+                      onChange={(e) => onChangeNewRegular(e, r.id as number)}
+                    />
+                  </td>
+                ) : (
+                  <td>---</td>
+                )}
+
+                <td style={{ textAlign: 'center' }}>
+                  <input
+                    type="checkbox"
+                    checked={r.percentage}
+                    onChange={(e) => onChangeNewRegularCheckbox(e, r.id as number)}
+                    name="percentage"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <Button outline className="btn-sm" color="primary" onClick={() => onClickInsert(r)}>
+                    追加
+                  </Button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </div>
-      <Button className="btn-sm" onClick={onClickInsert}>
+      <Button className="btn-sm" onClick={onClickCreateRegular}>
         新規追加
       </Button>
     </div>

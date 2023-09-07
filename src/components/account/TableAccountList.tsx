@@ -63,7 +63,8 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
     try {
       await deleteAccountWithApi(id);
       console.log('Success to delete Account');
-      window.location.reload();
+      setDefaultAccountList(defaultAccountList.filter((a) => a.id !== id));
+      setUpdatedAccountList(updatedAccountList.filter((a) => a.id !== id));
     } catch (error) {
       console.log('Failed to delete Account');
     }
@@ -182,7 +183,7 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                     name="name"
                     value={newAccount.name}
                     onChange={onChangeNewAccountForm}
-                    style={{ ...inputStyle, width: 140 }}
+                    style={{ ...inputStyle, width: 140, textAlign: 'center' }}
                     ref={newAccountNameInputRef}
                   />
                 </td>
@@ -192,7 +193,7 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                     name="numFreeTransfer"
                     value={newAccount.numFreeTransfer}
                     onChange={onChangeNewAccountForm}
-                    style={{ ...inputStyle, width: 100 }}
+                    style={{ ...inputStyle, width: 100, textAlign: 'center' }}
                   />
                 </td>
                 <td>
@@ -201,7 +202,7 @@ const TableAccountList: NextPage<Props> = ({ accountList }) => {
                     name="transferFee"
                     value={newAccount.transferFee}
                     onChange={onChangeNewAccountForm}
-                    style={{ ...inputStyle, width: 100 }}
+                    style={{ ...inputStyle, width: 100, textAlign: 'center' }}
                   />
                 </td>
                 <td>

@@ -28,26 +28,17 @@ const NewTransfer: NextPage<Props> = ({ regularList, accountList }) => {
 
   const onClickConfirm = async () => {
     // 新規transfer追加処理
-    const transfer: Transfer = { title: title };
+    let transfer: Transfer = { title: title };
     try {
-      await axios.post(`${ownApiPath}/api/transfer/insert`, transfer);
+      const res = await axios.post(`${ownApiPath}/api/transfer/insert`, transfer);
+      console.log(res.data);
+      transfer = res.data as Transfer;
       console.log('Success to insert Transfer');
+      router.push(`/transfer?id=${transfer.id}`);
     } catch (error) {
       console.log('Failed to insert Transfer');
       toast.error('新規振替追加に失敗しました');
-    }
-
-    // 追加したtransferを取得
-    let insertedTransfer: Transfer;
-    try {
-      await axios.get(`${ownApiPath}/api/transfer/findOneWithTitle?title=${title}`).then((res) => {
-        insertedTransfer = res.data as Transfer;
-        router.push(`/transfer?id=${insertedTransfer.id}`);
-      });
-    } catch (error) {
-      console.log('Failed to findOne Transfer');
       router.push('/?error=invalidRequest');
-      return;
     }
   };
 
