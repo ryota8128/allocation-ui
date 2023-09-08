@@ -3,9 +3,9 @@
 毎月固定で行っている振替と，毎月異なる振替を登録して，最適化することができます
 
 ## URL
-https://money-allocation.vercel.app
-ユーザ名：user1
-パスワード: user1
+https://money-allocation.vercel.app<br/>
+ユーザ名：user1<br/>
+パスワード: user1 <br/>
 で試せるのでどうぞ．
 
 ## オプション機能
