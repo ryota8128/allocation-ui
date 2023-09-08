@@ -4,6 +4,9 @@
 
 ## URL
 https://money-allocation.vercel.app
+ユーザ名：user1
+パスワード: user1
+で試せるのでどうぞ．
 
 ## オプション機能
 - 経由口座指定<br>
